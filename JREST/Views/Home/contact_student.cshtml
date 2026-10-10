@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "التواصل مع الطالبة";
+    Layout = "_HeaderAndFooter";
+}
+
+<div class="container my-5" dir="rtl">
+
+    <!-- عنوان الصفحة مع أيقونة رسائل -->
+    <div class="d-flex align-items-center justify-content-center mb-4">
+        <h3 class="text-custom-blue fw-bold mb-0">
+            <i class="bi bi-chat-dots-fill ms-2"></i> التواصل مع الطالبة
+        </h3>
+    </div>
+
+    <!-- نموذج إرسال الرسالة -->
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <form id="contactStudentForm">
+
+                <!-- حقل نص الرسالة -->
+                <div class="mb-4">
+                    <textarea id="messageText" rows="6" class="form-control custom-input required-field" placeholder="اكتب نص الرسالة للطالبة هنا..." required></textarea>
+                </div>
+
+                <!-- زر الإرسال -->
+                <div class="d-grid col-sm-6 mx-auto">
+                    <button type="button" id="sendBtn" class="btn btn-next text-white fw-semibold shadow-sm py-2">ارسال</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<!-- سكريبت التحقق والتنبيه عند الإرسال -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const sendBtn = document.getElementById("sendBtn");
+        const messageText = document.getElementById("messageText");
+
+        sendBtn.addEventListener("click", function (e) {
+            if (!messageText.value.trim()) {
+                alert("الرجاء كتابة نص الرسالة قبل الإرسال.");
+                messageText.focus();
+                e.preventDefault();
+            } else {
+                alert("تم ارسال الرسالة بنجاح!");
+                // هنا يمكنك لاحقاً إضافة الكود الخاص بإرسال البيانات للكنترولر
+                messageText.value = "";
+            }
+        });
+    });
+</script>

@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "تأكيد رفض الطلب";
+    Layout = "_HeaderAndFooter";
+}
+
+<div class="container d-flex flex-column justify-content-center align-items-center" style="min-height: 60vh;" dir="rtl">
+
+    <!-- نص رسالة التأكيد في المنتصف -->
+    <div class="text-center mb-4">
+        <h2 class="text-custom-blue fw-bold">هل انت متأكد من رفض الطلب؟</h2>
+    </div>
+
+    <!-- أزرار الإجراءات بنفس الحجم وبالترتيب المطلوب -->
+    <div class="d-flex justify-content-center gap-3 w-100">
+        <!-- زر رفض تم تحويله لرابط ينقل لصفحة سبب الرفض -->
+        <a href="@Url.Action("rejection_reason", "Home")" id="rejectBtn" class="btn btn-next text-white py-2 fw-semibold shadow-sm text-center text-decoration-none" style="width: 160px;">
+            رفض
+        </a>
+
+        <!-- زر رؤية الطلب -->
+        <a href="@Url.Action("view_student_request", "Home")" id="viewOrderBtn" class="btn btn-next text-white py-2 fw-semibold shadow-sm text-center text-decoration-none" style="width: 160px;">
+            رؤية الطلب
+        </a>
+    </div>
+
+</div>

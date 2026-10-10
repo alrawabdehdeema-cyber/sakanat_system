@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "سبب رفض الطلب";
+    Layout = "_HeaderAndFooter";
+}
+
+<div class="container my-5" dir="rtl">
+
+    <!-- عنوان الصفحة مع أيقونة رسائل -->
+    <div class="d-flex align-items-center justify-content-center mb-4">
+        <h3 class="text-custom-blue fw-bold mb-0">
+            <i class="bi bi-chat-dots-fill ms-2"></i> سبب رفض الطلب
+        </h3>
+    </div>
+
+    <!-- نموذج إدخال سبب الرفض -->
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <form id="rejectionReasonForm">
+
+                <!-- حقل نص سبب الرفض -->
+                <div class="mb-4">
+                    <textarea id="reasonText" rows="6" class="form-control custom-input required-field" placeholder="اكتب سبب رفض الطالبة هنا..." required></textarea>
+                </div>
+
+                <!-- زر الإرسال -->
+                <div class="d-grid col-sm-6 mx-auto">
+                    <button type="button" id="sendBtn" class="btn btn-next text-white fw-semibold shadow-sm py-2">ارسال</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<!-- سكريبت التحقق والتنبيه عند الإرسال -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const sendBtn = document.getElementById("sendBtn");
+        const reasonText = document.getElementById("reasonText");
+
+        sendBtn.addEventListener("click", function (e) {
+            if (!reasonText.value.trim()) {
+                alert("الرجاء كتابة سبب الرفض قبل الإرسال.");
+                reasonText.focus();
+                e.preventDefault();
+            } else {
+                alert("تم إرسال سبب الرفض بنجاح!");
+                // هنا يمكنك ربط كود الإرسال الفعلي للكنترولر لاحقاً
+                reasonText.value = "";
+            }
+        });
+    });
+</script>

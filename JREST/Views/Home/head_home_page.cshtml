@@ -1,0 +1,96 @@
+﻿@{
+    ViewData["Title"] = "لوحة تحكم المشرف / رئيس الشعبة";
+    Layout = "_HeaderAndFooter";
+}
+
+<div class="container my-5" style="max-width: 1100px; direction: rtl; text-align: right;">
+
+    <!-- عنوان الصفحة -->
+    <h3 class="fw-bold text-custom-blue mb-4">
+        نظام سكنات الجامعة الأردنية
+    </h3>
+
+    <!-- شريط الإحصائيات والبحث العلوي -->
+    <div class="row align-items-center mb-4 g-3">
+
+        <!-- بطاقات الإحصائيات -->
+        <div class="col-md-8 d-flex justify-content-start gap-3">
+            <div class="card border-0 shadow-sm rounded-pill px-4 py-2 bg-white d-flex flex-row align-items-center gap-3">
+                <i class="fas fa-users fs-4 text-secondary"></i>
+                <div class="text-secondary small">
+                    <span>عدد الطلاب الكلي</span><br>
+                    <span>في السكن</span>
+                </div>
+                <span class="fs-4 fw-bold text-custom-blue">0</span>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-pill px-4 py-2 bg-white d-flex flex-row align-items-center gap-3">
+                <i class="fas fa-user-plus fs-4 text-secondary"></i>
+                <div class="text-secondary small">
+                    <span>عدد الطلاب الجدد</span><br>
+                    <span>في السكن</span>
+                </div>
+                <span class="fs-4 fw-bold text-custom-blue">0</span>
+            </div>
+        </div>
+
+        <!-- خانة البحث -->
+        <div class="col-md-4">
+            <div class="input-group">
+                <input type="text" class="form-control rounded-pill text-end px-3" placeholder="بحث عن طالبة..." aria-label="بحث">
+                <button class="btn btn-outline-secondary rounded-pill me-2 px-3" type="button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- جدول الطلبات -->
+    <div class="card shadow-sm border-0 rounded-4 bg-white p-3">
+        <div class="table-responsive">
+            <table class="table table-bordered text-center align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="py-3 text-custom-blue">الرقم الجامعي</th>
+                        <th class="py-3 text-custom-blue">اسم الطالبة</th>
+                        <th class="py-3 text-custom-blue">معلومات الطالبة</th>
+                        <th class="py-3 text-custom-blue">رؤية الطلب</th>
+                        <th class="py-3 text-custom-blue">تقييم الطلب</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- سيتم تعبئة هذا الجزء لاحقاً من قاعدة البيانات عبر Model أو ViewBag -->
+                    <tr>
+                        <td colspan="5" class="text-center text-muted py-5">
+                            <i class="fas fa-folder-open fs-2 mb-2 d-block text-secondary"></i>
+                            لا توجد طلبات سكن جديدة قيد المراجعة حالياً.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ترانزيت الصفحات المبسط -->
+        <div class="d-flex justify-content-end mt-4">
+            <nav aria-label="Page navigation">
+                <ul class="pagination mb-0">
+                    <li class="page-item disabled"><a class="page-link text-muted" href="#">التالي</a></li>
+                    <li class="page-item active"><a class="page-link bg-custom-blue border-custom-blue text-white" href="#">1</a></li>
+                    <li class="page-item disabled"><a class="page-link text-muted" href="#">السابق</a></li>
+                </ul>
+            </nav>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    .bg-custom-blue {
+        background-color: #2666AE !important;
+    }
+
+    .border-custom-blue {
+        border-color: #2666AE !important;
+    }
+</style>

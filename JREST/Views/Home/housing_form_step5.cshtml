@@ -1,0 +1,120 @@
+﻿@{
+    ViewData["Title"] = "طلب إلحاق الطالب بالسكن - الخطوة 5";
+    Layout = "_HeaderAndFooter";
+}
+
+<div class="container my-5" dir="rtl">
+
+    <!-- عنوان الصفحة -->
+    <h3 class="text-custom-blue fw-bold mb-4 text-end">طلب إلحاق الطالب بالسكن</h3>
+
+    <!-- شريط الخطوات (Stepper) يدعم القفز الحر والتحديد التلقائي -->
+    <div class="stepper-container mb-5">
+        <div class="d-flex align-items-center gap-2">
+            <!-- الخطوة 1 -->
+            <a href="@Url.Action("housing_form", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form" ? "active" : "")">1</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 2 -->
+            <a href="@Url.Action("housing_form_step2", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step2" ? "active" : "")">2</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 3 -->
+            <a href="@Url.Action("housing_form_step3", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step3" ? "active" : "")">3</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 4 -->
+            <a href="@Url.Action("housing_form_step4", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step4" ? "active" : "")">4</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 5 (الحالية) -->
+            <a href="@Url.Action("housing_form_step5", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step5" ? "active" : "")">5</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 6 -->
+            <a href="@Url.Action("housing_form_step6", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step6" ? "active" : "")">6</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 7 -->
+            <a href="@Url.Action("housing_form_step7", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step7" ? "active" : "")">7</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 8 -->
+            <a href="@Url.Action("housing_form_step8", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step8" ? "active" : "")">8</a>
+        </div>
+    </div>
+
+    <!-- نموذج إدخال بيانات الخطوة الخامسة -->
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-9">
+            <form>
+
+                <!-- السؤال الأول: هل لديك تأمين صحي؟ -->
+                <div class="mb-4">
+                    <label class="form-label fw-semibold text-end d-block mb-2">هل لديك تأمين صحي؟</label>
+                    <div class="d-flex gap-5 justify-content-start">
+                        <div class="form-check d-flex align-items-center gap-2 ps-0">
+                            <input class="form-check-input m-0" type="radio" name="healthInsurance" id="insYes">
+                            <label class="form-check-label" for="insYes">نعم</label>
+                        </div>
+                        <div class="form-check d-flex align-items-center gap-2 ps-0">
+                            <input class="form-check-input m-0" type="radio" name="healthInsurance" id="insNo">
+                            <label class="form-check-label" for="insNo">لا أدفع نقداً</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- السؤال الثاني: هل تحتاج الى اي نوع من الرعاية الصحية وهل لديك امراض؟ -->
+                <div class="mb-4">
+                    <label class="form-label fw-semibold text-end d-block mb-2">هل تحتاج الى اي نوع من الرعاية الصحية وهل لديك امراض؟</label>
+                    <div class="d-flex gap-5 justify-content-start">
+                        <div class="form-check d-flex align-items-center gap-2 ps-0">
+                            <input class="form-check-input m-0" type="radio" name="medicalCareNeeded" id="careYes">
+                            <label class="form-check-label" for="careYes">نعم</label>
+                        </div>
+                        <div class="form-check d-flex align-items-center gap-2 ps-0">
+                            <input class="form-check-input m-0" type="radio" name="medicalCareNeeded" id="careNo">
+                            <label class="form-check-label" for="careNo">لا أحتاج الى رعاية صحية</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- الحقول الاختيارية (Checkboxes مع حقول تفصيلية تحتها) -->
+                <!-- 1. اعاني من حساسيه وتفصيلها -->
+                <div class="mb-3">
+                    <div class="form-check mb-2 text-end d-flex align-items-center gap-2 ps-0">
+                        <input class="form-check-input m-0" type="checkbox" id="allergyCheck">
+                        <label class="form-check-label fw-semibold" for="allergyCheck">اعاني من حساسيه وتفصيلها</label>
+                    </div>
+                    <textarea class="form-control custom-input" rows="2" placeholder="اكتب التفاصيل هنا..."></textarea>
+                </div>
+
+                <!-- 2. اعاني من اعاقة جسدية وتفصيلها -->
+                <div class="mb-3">
+                    <div class="form-check mb-2 text-end d-flex align-items-center gap-2 ps-0">
+                        <input class="form-check-input m-0" type="checkbox" id="disabilityCheck">
+                        <label class="form-check-label fw-semibold" for="disabilityCheck">اعاني من اعاقة جسدية وتفصيلها</label>
+                    </div>
+                    <textarea class="form-control custom-input" rows="2" placeholder="اكتب التفاصيل هنا..."></textarea>
+                </div>
+
+                <!-- 3. أحتاج الى دواء محدد وتفصيله -->
+                <div class="mb-4">
+                    <div class="form-check mb-2 text-end d-flex align-items-center gap-2 ps-0">
+                        <input class="form-check-input m-0" type="checkbox" id="medicineCheck">
+                        <label class="form-check-label fw-semibold" for="medicineCheck">أحتاج الى دواء محدد وتفصيله</label>
+                    </div>
+                    <textarea class="form-control custom-input" rows="2" placeholder="اكتب التفاصيل هنا..."></textarea>
+                </div>
+
+                <!-- أزرار السابق والتالي -->
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="@Url.Action("housing_form_step4", "Home")" class="btn btn-secondary px-4 fw-semibold shadow-sm text-decoration-none">السابق</a>
+                    <a href="@Url.Action("housing_form_step6", "Home")" class="btn btn-next text-white px-4 fw-semibold shadow-sm text-decoration-none">التالي</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>

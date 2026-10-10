@@ -1,0 +1,203 @@
+﻿@{
+    ViewData["Title"] = "طلب إلحاق الطالب بالسكن - الخطوة 3";
+    Layout = "_HeaderAndFooter";
+}
+
+<div class="container my-5" dir="rtl">
+
+    <!-- عنوان الصفحة -->
+    <h3 class="text-custom-blue fw-bold mb-4 text-end">طلب إلحاق الطالب بالسكن</h3>
+
+    <!-- شريط الخطوات (Stepper) يدعم القفز الحر والتحديد التلقائي -->
+    <div class="stepper-container mb-5">
+        <div class="d-flex align-items-center gap-2">
+            <!-- الخطوة 1 -->
+            <a href="@Url.Action("housing_form", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form" ? "active" : "")">1</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 2 -->
+            <a href="@Url.Action("housing_form_step2", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step2" ? "active" : "")">2</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 3 (الحالية) -->
+            <a href="@Url.Action("housing_form_step3", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step3" ? "active" : "")">3</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 4 -->
+            <a href="@Url.Action("housing_form_step4", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step4" ? "active" : "")">4</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 5 -->
+            <a href="@Url.Action("housing_form_step5", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step5" ? "active" : "")">5</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 6 -->
+            <a href="@Url.Action("housing_form_step6", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step6" ? "active" : "")">6</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 7 -->
+            <a href="@Url.Action("housing_form_step7", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step7" ? "active" : "")">7</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 8 -->
+            <a href="@Url.Action("housing_form_step8", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step8" ? "active" : "")">8</a>
+        </div>
+    </div>
+
+    <!-- نموذج إدخال بيانات الخطوة الثالثة -->
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-9">
+            <form id="step3Form">
+                <!-- الصف الأول من الحقول والقوائم -->
+                <div class="row mb-3">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block">المستوى الدراسي <span class="text-danger">*</span></label>
+                        <select id="field1" class="form-select custom-input required-field" required>
+                            <option selected disabled value=""></option>
+                            <option>سنة أولى</option>
+                            <option>سنة ثانية</option>
+                            <option>سنة ثالثة</option>
+                            <option>سنة رابعة</option>
+                            <option>سنة خامسة فما فوق</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block">العام الدراسي <span class="text-danger">*</span></label>
+                        <!-- سيتم تعبئة هذه القائمة تلقائياً عبر الجافاسكريبت بدءاً من السنة الحالية فصاعداً -->
+                        <select id="field2" class="form-select custom-input required-field" required>
+                            <option selected disabled value=""></option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- الصف الثاني من القوائم -->
+                <div class="row mb-3">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block">اسم السكن <span class="text-danger">*</span></label>
+                        <select id="field3" class="form-select custom-input required-field" required>
+                            <option selected disabled value=""></option>
+                            <option>سكن الأندلس</option>
+                            <option>سكن الزهراء</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block">نوع الدراسة <span class="text-danger">*</span></label>
+                        <select id="field4" class="form-select custom-input required-field" required>
+                            <option selected disabled value=""></option>
+                            <option>بنظام البكالوريوس - تنافس</option>
+                            <option>بنظام البكالوريوس - موازي</option>
+                            <option>دراسات عليا (ماجستير/دكتوراه)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- الصف الثالث من القوائم (الكليات حسب الصور الجديدة) -->
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block">الكلية <span class="text-danger">*</span></label>
+                        <select id="field5" class="form-select custom-input required-field" required>
+                            <option selected disabled value=""></option>
+                            <!-- القائمة الأولى -->
+                            <option>كلية الآداب</option>
+                            <option>كلية الأعمال</option>
+                            <option>كلية الشريعة</option>
+                            <option>كلية العلوم التربوية</option>
+                            <option>كلية الحقوق</option>
+                            <option>كلية علوم الرياضة</option>
+                            <option>كلية الفنون والتصميم</option>
+                            <option>كلية الأمير الحسين بن عبدالله الثاني للعلوم السياسية والدراسات الدولية</option>
+                            <option>كلية اللغات الأجنبية</option>
+                            <option>كلية الآثار والسياحة</option>
+                            <!-- القائمة الثانية -->
+                            <option>كلية العلوم</option>
+                            <option>كلية الزراعة</option>
+                            <option>كلية الهندسة</option>
+                            <option>كلية الملك عبدالله الثاني لتكنولوجيا المعلومات</option>
+                            <option>الكلية التقنية</option>
+                            <!-- القائمة الثالثة -->
+                            <option>كلية الطب</option>
+                            <option>كلية التمريض</option>
+                            <option>كلية الصيدلة</option>
+                            <option>كلية طب الأسنان</option>
+                            <option>كلية علوم التأهيل</option>
+                            <option>معهد الصحة العامة</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block">العقوبات <span class="text-danger">*</span></label>
+                        <select id="field6" class="form-select custom-input required-field" required>
+                            <option selected disabled value=""></option>
+                            <option>لا يوجد</option>
+                            <option>تنبيه</option>
+                            <option>إنذار</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- حقول التعهد والإقرار (محاذاة كاملة لليمين) -->
+                <div class="mb-4 p-3 bg-light rounded shadow-sm text-end">
+                    <!-- السطر الأول -->
+                    <div class="mb-3">
+                        <span class="fw-semibold">ولي أمر الطالبة</span>
+                        <input type="text" id="field7" class="form-control custom-input d-inline-block mx-2 required-field" placeholder="يرجى كتابة اسم الطالبة" style="width: 250px;" required />
+                        <span class="fw-semibold">أتحمل المسؤولية القانونية أمام ادارة</span>
+                    </div>
+
+                    <!-- السطر الثاني -->
+                    <div class="mb-2">
+                        <input type="text" id="field8" class="form-control custom-input d-inline-block ms-2 required-field" placeholder="يرجى كتابة اسم ولي الأمر" style="width: 250px;" required />
+                        <span class="fw-semibold">الجامعة في حال اي نقص أنا</span>
+                    </div>
+                </div>
+
+                <!-- أزرار السابق والتالي -->
+                <div class="d-flex justify-content-between">
+                    <a href="@Url.Action("housing_form_step2", "Home")" class="btn btn-secondary px-4 fw-semibold shadow-sm text-decoration-none">السابق</a>
+                    <button type="button" id="nextBtn" class="btn btn-next text-white px-4 fw-semibold shadow-sm">التالي</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<!-- سكريبت توليد الأعوام الدراسية ديناميكياً (يبدأ من السنة الحالية فصاعداً) والتحقق من الحقول -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const academicYearSelect = document.getElementById("field2");
+        const currentYear = new Date().getFullYear();
+
+        // توليد العام الدراسي الحالي والسنوات القادمة فقط (مثلاً: 2026/2027، 2027/2028، 2028/2029)
+        for (let i = 0; i <= 2; i++) {
+            let startYear = currentYear + i;
+            let endYear = startYear + 1;
+            let optionText = `${startYear}/${endYear}`;
+
+            let option = document.createElement("option");
+            option.value = optionText;
+            option.textContent = optionText;
+
+            academicYearSelect.appendChild(option);
+        }
+
+        const nextBtn = document.getElementById("nextBtn");
+        const requiredFields = document.querySelectorAll(".required-field");
+
+        nextBtn.addEventListener("click", function (e) {
+            let allFilled = true;
+
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    allFilled = false;
+                }
+            });
+
+            if (!allFilled) {
+                alert("الرجاء تعبئة جميع الحقول الإجبارية وإكمال التعهد قبل الانتقال للخطوة التالية.");
+                e.preventDefault();
+            } else {
+                window.location.href = '@Url.Action("housing_form_step4", "Home")';
+            }
+        });
+    });
+</script>

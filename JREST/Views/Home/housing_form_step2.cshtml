@@ -1,0 +1,166 @@
+﻿@{
+    ViewData["Title"] = "طلب إلحاق الطالب بالسكن - الخطوة 2";
+    Layout = "_HeaderAndFooter";
+
+    // استقبال القيمة التي تحدد هل هو طلب جديد أم تجديد
+    bool isNew = ViewBag.IsNew ?? true;
+}
+
+<div class="container my-5" dir="rtl">
+
+    <!-- عنوان الصفحة -->
+    <h3 class="text-custom-blue fw-bold mb-4 text-end">
+        @(isNew ? "طلب إلحاق الطالب بالسكن (طلب جديد)" : "طلب إلحاق الطالب بالسكن (تجديد / متابعة طلب)")
+    </h3>
+
+    <!-- شريط الخطوات (Stepper) مع تمرير قيمة isNew في الروابط -->
+    <div class="stepper-container mb-5">
+        <div class="d-flex align-items-center gap-2">
+            <a href="@Url.Action("housing_form", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">1</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step2", "Home", new { isNew = isNew })" class="step-circle text-decoration-none active">2</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step3", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">3</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step4", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">4</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step5", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">5</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step6", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">6</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step7", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">7</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step8", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">8</a>
+        </div>
+    </div>
+
+    <!-- نموذج إدخال بيانات الخطوة الثانية -->
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <!-- تم ربط الفورم بـ Action لحفظ بيانات الخطوة الثانية عبر POST -->
+            <form id="step2Form" asp-action="SaveStep2" asp-controller="Home" method="post">
+                <input type="hidden" name="isNew" value="@isNew.ToString()" />
+
+                <div class="row mb-3">
+
+                    <!-- حقل تاريخ الالتحاق أول مره (يظهر فقط إذا كان تجديداً، أي isNew = false) -->
+                    @if (!isNew)
+                    {
+                        <div class="col-md-6 mb-3" id="enrollmentDateDiv">
+                            <label class="form-label fw-semibold text-end d-block">تاريخ الالتحاق اول مره <span class="text-danger">*</span></label>
+                            <input type="date" name="enrollmentDate" id="field1" class="form-control custom-input required-field" required />
+                        </div>
+                    }
+
+                    <!-- رقم موبايل الطالبة -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block">رقم موبايل الطالبة <span class="text-danger">*</span></label>
+                        <input type="tel" name="studentPhone" id="studentPhone" class="form-control custom-input required-field" placeholder="07xxxxxxxx" maxlength="10" required />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <!-- رقم موبايل ولي الامر -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block">رقم موبايل ولي الامر <span class="text-danger">*</span></label>
+                        <input type="tel" name="parentPhone" id="parentPhone" class="form-control custom-input required-field" placeholder="07xxxxxxxx" maxlength="10" required />
+                    </div>
+                    <!-- رقم جواز السفر (اختياري) -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block">رقم جواز السفر</label>
+                        <input type="text" name="passportNumber" class="form-control custom-input" />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <!-- الحالة الاجتماعية -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block">الحالة الاجتماعية <span class="text-danger">*</span></label>
+                        <select name="maritalStatus" id="field4" class="form-select custom-input required-field" required>
+                            <option selected disabled value=""></option>
+                            <option value="أعزب / عزباء">أعزب / عزباء</option>
+                            <option value="متزوج / متزوجة">متزوج / متزوجة</option>
+                        </select>
+                    </div>
+                    <!-- الديانة -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block">الديانة <span class="text-danger">*</span></label>
+                        <select name="religion" id="field5" class="form-select custom-input required-field" required>
+                            <option selected disabled value=""></option>
+                            <option value="مسلم">مسلم</option>
+                            <option value="مسيحي">مسيحي</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <!-- تاريخ الميلاد -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block">تاريخ الميلاد <span class="text-danger">*</span></label>
+                        <input type="date" name="birthDate" id="field6" class="form-control custom-input required-field" required />
+                    </div>
+                    <!-- الجنسية -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block">الجنسية <span class="text-danger">*</span></label>
+                        <input type="text" name="nationality" id="field7" class="form-control custom-input required-field" list="nationalityOptions" required />
+                        <datalist id="nationalityOptions">
+                            <option value="أردني / أردنية"></option>
+                        </datalist>
+                    </div>
+                </div>
+
+                <!-- أزرار السابق والتالي -->
+                <div class="d-flex justify-content-between">
+                    <a href="@Url.Action("housing_form", "Home", new { isNew = isNew })" class="btn btn-secondary px-4 fw-semibold shadow-sm text-decoration-none">السابق</a>
+                    <button type="submit" id="nextBtn" class="btn btn-next text-white px-4 fw-semibold shadow-sm">التالي</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<!-- سكريبت التحقق وإظهار رسالة التنبيه -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const step2Form = document.getElementById("step2Form");
+        const requiredFields = document.querySelectorAll(".required-field");
+        const studentPhone = document.getElementById("studentPhone");
+        const parentPhone = document.getElementById("parentPhone");
+
+        function isValidPhone(phone) {
+            const phoneRegex = /^07\d{8}$/;
+            return phoneRegex.test(phone);
+        }
+
+        step2Form.addEventListener("submit", function (e) {
+            let allFilled = true;
+
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    allFilled = false;
+                }
+            });
+
+            if (!allFilled) {
+                alert("الرجاء تعبئة جميع الحقول الإجبارية قبل الانتقال للخطوة التالية.");
+                e.preventDefault();
+                return;
+            }
+
+            if (!isValidPhone(studentPhone.value.trim())) {
+                alert("الرجاء إدخال رقم موبايل صحيح للطالبة (يجب أن يبدأ بـ 07 ويتكون من 10 أرقام).");
+                studentPhone.focus();
+                e.preventDefault();
+                return;
+            }
+
+            if (!isValidPhone(parentPhone.value.trim())) {
+                alert("الرجاء إدخال رقم موبايل صحيح لولي الأمر (يجب أن يبدأ بـ 07 ويتكون من 10 أرقام).");
+                parentPhone.focus();
+                e.preventDefault();
+                return;
+            }
+        });
+    });
+</script>

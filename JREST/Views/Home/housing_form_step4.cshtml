@@ -1,0 +1,119 @@
+﻿@{
+    ViewData["Title"] = "طلب إلحاق الطالب بالسكن - الخطوة 4";
+    Layout = "_HeaderAndFooter";
+}
+
+<div class="container my-5">
+
+    <!-- عنوان الصفحة -->
+    <h3 class="text-custom-blue fw-bold mb-4 text-end">طلب إلحاق الطالب بالسكن</h3>
+
+    <!-- شريط الخطوات (Stepper) يدعم القفز الحر والتحديد التلقائي -->
+    <div class="stepper-container mb-5">
+        <div class="d-flex align-items-center gap-2">
+            <!-- الخطوة 1 -->
+            <a href="@Url.Action("housing_form", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form" ? "active" : "")">1</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 2 -->
+            <a href="@Url.Action("housing_form_step2", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step2" ? "active" : "")">2</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 3 -->
+            <a href="@Url.Action("housing_form_step3", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step3" ? "active" : "")">3</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 4 (الحالية) -->
+            <a href="@Url.Action("housing_form_step4", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step4" ? "active" : "")">4</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 5 -->
+            <a href="@Url.Action("housing_form_step5", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step5" ? "active" : "")">5</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 6 -->
+            <a href="@Url.Action("housing_form_step6", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step6" ? "active" : "")">6</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 7 -->
+            <a href="@Url.Action("housing_form_step7", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step7" ? "active" : "")">7</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 8 -->
+            <a href="@Url.Action("housing_form_step8", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step8" ? "active" : "")">8</a>
+        </div>
+    </div>
+
+    <!-- نموذج إدخال بيانات الخطوة الرابعة -->
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-9">
+            <form>
+                <!-- العنوان السكني الدائم لعائلة الطالبة -->
+                <div class="text-end mb-4">
+                    <h5 class="fw-bold text-dark">العنوان السكني الدائم لعائلة الطالبة</h5>
+                </div>
+
+                <!-- الصف الأول: المحافظة وطبيعة السكن -->
+                <div class="row mb-3">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block mb-1">المحافظة</label>
+                        <select class="form-select custom-input">
+                            <option selected disabled></option>
+                            <option>عمان</option>
+                            <option>إربد</option>
+                            <option>الزرقاء</option>
+                            <option>السلط</option>
+                            <option>الكرك</option>
+                            <option>مادبا</option>
+                            <option>عجلون</option>
+                            <option>جرش</option>
+                            <option>المفرق</option>
+                            <option>معان</option>
+                            <option>العقبة</option>
+                            <option>الطفيلة</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block mb-1">طبيعة السكن</label>
+                        <select class="form-select custom-input">
+                            <option selected disabled></option>
+                            <option>ملك</option>
+                            <option>مستأجر</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- الصف الثاني: المدينة ورقم المبنى -->
+                <div class="row mb-3">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block mb-1">المدينة</label>
+                        <input type="text" class="form-control custom-input" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block mb-1">رقم المبنى</label>
+                        <input type="text" class="form-control custom-input" />
+                    </div>
+                </div>
+
+                <!-- الصف الثالث: الشارع والحي -->
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block mb-1">الشارع</label>
+                        <input type="text" class="form-control custom-input" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block mb-1">الحي</label>
+                        <input type="text" class="form-control custom-input" />
+                    </div>
+                </div>
+
+                <!-- أزرار السابق والتالي -->
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="@Url.Action("housing_form_step3", "Home")" class="btn btn-secondary px-4 fw-semibold shadow-sm text-decoration-none">السابق</a>
+                    <a href="@Url.Action("housing_form_step5", "Home")" class="btn btn-next text-white px-4 fw-semibold shadow-sm text-decoration-none">التالي</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

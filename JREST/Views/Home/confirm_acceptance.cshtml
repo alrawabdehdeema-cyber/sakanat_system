@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "تأكيد قبول الطلب";
+    Layout = "_HeaderAndFooter";
+}
+
+<div class="container d-flex flex-column justify-content-center align-items-center" style="min-height: 60vh;" dir="rtl">
+
+    <!-- نص رسالة التأكيد في المنتصف -->
+    <div class="text-center mb-4">
+        <h2 class="text-custom-blue fw-bold">هل انت متأكد من قبول الطلب؟</h2>
+    </div>
+
+    <!-- أزرار الإجراءات بنفس الحجم وبالترتيب المطلوب (قبول أولاً ثم رؤية الطلب) -->
+    <div class="d-flex justify-content-center gap-3 w-100">
+        <!-- زر قبول -->
+        <button type="button" id="acceptBtn" class="btn btn-next text-white py-2 fw-semibold shadow-sm" style="width: 160px;">
+            قبول
+        </button>
+
+        <!-- زر رؤية الطلب -->
+        <a href="@Url.Action("view_student_request", "Home")" id="viewOrderBtn" class="btn btn-next text-white py-2 fw-semibold shadow-sm text-center text-decoration-none" style="width: 160px;">
+            رؤية الطلب
+        </a>
+    </div>
+
+</div>
+
+<!-- سكريبت للتفاعل مع الأزرار -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const acceptBtn = document.getElementById("acceptBtn");
+
+        acceptBtn.addEventListener("click", function () {
+            alert("تم قبول الطلب بنجاح!");
+            // هنا يمكنك إضافة كود توجيه المشرف أو حفظ الحالة عبر Ajax مستقبلاً
+        });
+    });
+</script>

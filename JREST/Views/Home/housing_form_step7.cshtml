@@ -1,0 +1,96 @@
+﻿@{
+    ViewData["Title"] = "طلب إلحاق الطالب بالسكن - الخطوة 7";
+    Layout = "_HeaderAndFooter";
+}
+
+<div class="container my-5" dir="rtl">
+
+    <!-- عنوان الصفحة -->
+    <h3 class="text-custom-blue fw-bold mb-4 text-end">طلب إلحاق الطالب بالسكن</h3>
+
+    <!-- شريط الخطوات (Stepper) يدعم القفز الحر والتحديد التلقائي -->
+    <div class="stepper-container mb-5">
+        <div class="d-flex align-items-center gap-2">
+            <!-- الخطوة 1 -->
+            <a href="@Url.Action("housing_form", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form" ? "active" : "")">1</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 2 -->
+            <a href="@Url.Action("housing_form_step2", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step2" ? "active" : "")">2</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 3 -->
+            <a href="@Url.Action("housing_form_step3", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step3" ? "active" : "")">3</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 4 -->
+            <a href="@Url.Action("housing_form_step4", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step4" ? "active" : "")">4</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 5 -->
+            <a href="@Url.Action("housing_form_step5", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step5" ? "active" : "")">5</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 6 -->
+            <a href="@Url.Action("housing_form_step6", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step6" ? "active" : "")">6</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 7 (الحالية) -->
+            <a href="@Url.Action("housing_form_step7", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step7" ? "active" : "")">7</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 8 -->
+            <a href="@Url.Action("housing_form_step8", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step8" ? "active" : "")">8</a>
+        </div>
+    </div>
+
+    <!-- نموذج إدخال بيانات الخطوة السابعة -->
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-9">
+            <form>
+
+                <div class="d-flex flex-column gap-4 mb-5">
+                    <!-- الصلاحية 1 -->
+                    <div class="form-check d-flex align-items-start gap-2 ps-0">
+                        <input class="form-check-input m-0 mt-1" type="checkbox" id="permission1">
+                        <label class="form-check-label" for="permission1">
+                            السماح للطالبة بمغادرة السكن لقضاء عطلة نهاية الاسبوع والأعياد الرسمية بمفردها وعند الأشخاص المذكورين اعلاه فقط
+                        </label>
+                    </div>
+
+                    <!-- الصلاحية 2 -->
+                    <div class="form-check d-flex align-items-center gap-2 ps-0">
+                        <input class="form-check-input m-0" type="checkbox" id="permission2">
+                        <label class="form-check-label" for="permission2">
+                            السماح للطالبة بالمشاركة بالرحلات الداخلية لمدة يوم
+                        </label>
+                    </div>
+
+                    <!-- الصلاحية 3 -->
+                    <div class="form-check d-flex align-items-center gap-2 ps-0">
+                        <input class="form-check-input m-0" type="checkbox" id="permission3">
+                        <label class="form-check-label" for="permission3">
+                            السماح للطالبة بالمشاركة بالرحلات الداخلية لأكثر من يوم
+                        </label>
+                    </div>
+
+                    <!-- الصلاحية 4 -->
+                    <div class="form-check d-flex align-items-center gap-2 ps-0">
+                        <input class="form-check-input m-0" type="checkbox" id="permission4">
+                        <label class="form-check-label" for="permission4">
+                            السماح للطالبة بالسفر خارج البلاد بمفردها (للاشخاص القاطنين خارج الأردن)
+                        </label>
+                    </div>
+                </div>
+
+                <!-- أزرار السابق والتالي -->
+                <div class="d-flex justify-content-between">
+                    <a href="@Url.Action("housing_form_step6", "Home")" class="btn btn-secondary px-4 fw-semibold shadow-sm text-decoration-none">السابق</a>
+                    <a href="@Url.Action("housing_form_step8", "Home")" class="btn btn-next text-white px-4 fw-semibold shadow-sm text-decoration-none">التالي</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>

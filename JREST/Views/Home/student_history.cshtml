@@ -1,0 +1,78 @@
+﻿@{
+    ViewData["Title"] = "معلومات الطالبة";
+    Layout = "_HeaderAndFooter";
+
+    // استقبال اسم الطالبة (يمكن تمريره عبر الـ ViewBag أو استخدامه افتراضياً)
+    string studentName = ViewBag.StudentName ?? "ساره مهند";
+}
+
+<div class="container my-5" dir="rtl">
+
+    <!-- عنوان الصفحة -->
+    <div class="d-flex align-items-center justify-content-center mb-5">
+        <h3 class="text-custom-blue fw-bold mb-0">
+            <i class="bi bi-clipboard2-data-fill ms-2"></i> معلومات الطالبة @studentName
+        </h3>
+    </div>
+
+    <!-- نموذج اختيار العام والفصل -->
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <form id="studentHistoryForm">
+
+                <!-- اختيار العام -->
+                <div class="mb-4 row align-items-center">
+                    <div class="col-sm-3 text-sm-end">
+                        <label class="form-label fw-semibold fs-5">العام</label>
+                    </div>
+                    <div class="col-sm-9">
+                        <select id="academicYear" class="form-select custom-input py-2">
+                            <option selected disabled value="">جميع السنوات...</option>
+                            <option value="2025">2025/2024</option>
+                            <option value="2026">2026/2025</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- اختيار الفصل -->
+                <div class="mb-5 row align-items-center">
+                    <div class="col-sm-3 text-sm-end">
+                        <label class="form-label fw-semibold fs-5">الفصل</label>
+                    </div>
+                    <div class="col-sm-9">
+                        <select id="semester" class="form-select custom-input py-2">
+                            <option selected disabled value="">جميع الفصول...</option>
+                            <option value="1">الفصل الأول</option>
+                            <option value="2">الفصل الثاني</option>
+                            <option value="3">الفصل الصيفي</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- زر فتح الطلب -->
+                <div class="d-grid col-sm-6 mx-auto">
+                    <button type="button" id="openOrderBtn" class="btn btn-next text-white fw-semibold shadow-sm py-2 fs-5">فتح الطلب</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<!-- سكريبت التفاعل والتحقق -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const openOrderBtn = document.getElementById("openOrderBtn");
+        const academicYear = document.getElementById("academicYear");
+        const semester = document.getElementById("semester");
+
+        openOrderBtn.addEventListener("click", function () {
+            // تحقق مبدئي (اختياري) أو توجيه لصفحة عرض الطلب الخاص بالطالبة
+            alert("جاري فتح طلب الطالبة للفصل المحدد...");
+
+            // مثال على التوجيه لاحقاً:
+            // window.location.href = '@Url.Action("housing_form", "Home")';
+        });
+    });
+</script>

@@ -1,0 +1,119 @@
+﻿@{
+    ViewData["Title"] = "طلب إلحاق الطالب بالسكن - الخطوة الأخيرة";
+    Layout = "_HeaderAndFooter";
+}
+
+<div class="container my-5" dir="rtl">
+
+    <!-- عنوان الصفحة -->
+    <h3 class="text-custom-blue fw-bold mb-4 text-end">طلب إلحاق الطالب بالسكن</h3>
+
+    <!-- شريط الخطوات (Stepper) يدعم القفز الحر والتحديد التلقائي -->
+    <div class="stepper-container mb-5">
+        <div class="d-flex align-items-center gap-2">
+            <!-- الخطوة 1 -->
+            <a href="@Url.Action("housing_form", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form" ? "active" : "")">1</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 2 -->
+            <a href="@Url.Action("housing_form_step2", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step2" ? "active" : "")">2</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 3 -->
+            <a href="@Url.Action("housing_form_step3", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step3" ? "active" : "")">3</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 4 -->
+            <a href="@Url.Action("housing_form_step4", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step4" ? "active" : "")">4</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 5 -->
+            <a href="@Url.Action("housing_form_step5", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step5" ? "active" : "")">5</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 6 -->
+            <a href="@Url.Action("housing_form_step6", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step6" ? "active" : "")">6</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 7 -->
+            <a href="@Url.Action("housing_form_step7", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step7" ? "active" : "")">7</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 8 (الحالية والأخيرة) -->
+            <a href="@Url.Action("housing_form_step8", "Home")" class="step-circle text-decoration-none @(ViewContext.RouteData.Values["action"]?.ToString() == "housing_form_step8" ? "active" : "")">8</a>
+        </div>
+    </div>
+
+    <!-- نموذج رفع الوثائق -->
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-9">
+            <form id="housingForm">
+
+                <h5 class="fw-bold mb-4 text-end">يرجى تحميل الوثائق التالية</h5>
+
+                <div class="d-flex flex-column gap-4 mb-5">
+
+                    <!-- 1. صورة واضحة ملونة عن شهادة خلو الأمراض (إجباري) -->
+                    <div class="d-flex align-items-center justify-content-between p-3 border rounded bg-light">
+                        <label class="form-label fw-semibold m-0">صورة واضحة ملونة عن شهادة خلو الأمراض <span class="text-danger">*</span></label>
+                        <input type="file" class="form-control w-50 required-file" id="file1" required>
+                    </div>
+
+                    <!-- 2. صورة واضحة عن دفتر العائلة (إجباري) -->
+                    <div class="d-flex align-items-center justify-content-between p-3 border rounded bg-light">
+                        <label class="form-label fw-semibold m-0">صورة واضحة عن دفتر العائلة <span class="text-danger">*</span></label>
+                        <input type="file" class="form-control w-50 required-file" id="file2" required>
+                    </div>
+
+                    <!-- 3. صورة واضحة عن كتاب التوكيل \ الكفالة الرسمية في حال تغيير الوكيل فقط (اختياري) -->
+                    <div class="d-flex align-items-center justify-content-between p-3 border rounded bg-light">
+                        <label class="form-label fw-semibold m-0">صورة واضحة عن كتاب التوكيل \ الكفالة الرسمية في حال تغيير الوكيل فقط</label>
+                        <input type="file" class="form-control w-50" id="fileOptional">
+                    </div>
+
+                    <!-- 4. صورة واضحة ملونة عن هوية الأحوال المدنية للوكيل أو الصفحة الأولى لجواز السفر (إجباري) -->
+                    <div class="d-flex align-items-center justify-content-between p-3 border rounded bg-light">
+                        <label class="form-label fw-semibold m-0">صورة واضحة ملونة عن هوية الأحوال المدنية للوكيل أو الصفحة الأولى لجواز السفر <span class="text-danger">*</span></label>
+                        <input type="file" class="form-control w-50 required-file" id="file3" required>
+                    </div>
+
+                </div>
+
+                <!-- أزرار السابق وإرسال الطلب -->
+                <div class="d-flex justify-content-between">
+                    <a href="@Url.Action("housing_form_step7", "Home")" class="btn btn-secondary px-4 fw-semibold shadow-sm text-decoration-none">السابق</a>
+                    <button type="submit" id="submitBtn" class="btn btn-next text-white px-4 fw-semibold shadow-sm" disabled>إرسال الطلب</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<!-- السكريبت المباشر بدون استخدام Section لتجنب الخطأ -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const requiredFiles = document.querySelectorAll(".required-file");
+        const submitBtn = document.getElementById("submitBtn");
+
+        function checkInputs() {
+            let allFilled = true;
+            requiredFiles.forEach(input => {
+                if (!input.files || input.files.length === 0) {
+                    allFilled = false;
+                }
+            });
+
+            if (allFilled) {
+                submitBtn.removeAttribute("disabled");
+            } else {
+                submitBtn.setAttribute("disabled", "true");
+            }
+        }
+
+        requiredFiles.forEach(input => {
+            input.addEventListener("change", checkInputs);
+        });
+    });
+</script>

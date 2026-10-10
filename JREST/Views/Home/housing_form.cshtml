@@ -1,0 +1,249 @@
+﻿@{
+
+    ViewData["Title"] = "طلب إلحاق الطالب بالسكن";
+
+    Layout = "_HeaderAndFooter";
+
+
+
+    // استقبال القيمة التي تحدد هل هو طلب جديد أم تجديد
+
+    bool isNew = ViewBag.IsNew ?? true;
+
+}
+
+<div class="container my-5" dir="rtl">
+
+
+
+    <!-- عنوان الصفحة -->
+
+    <h3 class="text-custom-blue fw-bold mb-4 text-end">
+
+        @(isNew ? "طلب إلحاق الطالب بالسكن (طلب جديد)" : "طلب إلحاق الطالب بالسكن (تجديد / متابعة طلب)")
+
+    </h3>
+
+
+
+    <!-- شريط الخطوات (Stepper) -->
+
+    <div class="stepper-container mb-5">
+
+        <div class="d-flex align-items-center gap-2">
+
+            <a href="@Url.Action("housing_form", "Home", new { isNew = isNew })" class="step-circle text-decoration-none active">1</a>
+
+            <div class="step-line"></div>
+
+            <a href="@Url.Action("housing_form_step2", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">2</a>
+
+            <div class="step-line"></div>
+
+            <a href="@Url.Action("housing_form_step3", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">3</a>
+
+            <div class="step-line"></div>
+
+            <a href="@Url.Action("housing_form_step4", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">4</a>
+
+            <div class="step-line"></div>
+
+            <a href="@Url.Action("housing_form_step5", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">5</a>
+
+            <div class="step-line"></div>
+
+            <a href="@Url.Action("housing_form_step6", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">6</a>
+
+            <div class="step-line"></div>
+
+            <a href="@Url.Action("housing_form_step7", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">7</a>
+
+            <div class="step-line"></div>
+
+            <a href="@Url.Action("housing_form_step8", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">8</a>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- نموذج إدخال البيانات -->
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-8 col-lg-6">
+
+            <form id="step1Form">
+
+
+
+                <!-- الرقم الجامعي -->
+
+                <div class="mb-3 row align-items-center">
+
+                    <div class="col-sm-4 text-sm-end">
+
+                        <label class="form-label fw-semibold">الرقم الجامعي <span class="text-danger">*</span></label>
+
+                    </div>
+
+                    <div class="col-sm-8">
+
+                        <input type="number" id="field1" class="form-control custom-input required-field" placeholder="أدخل الرقم الجامعي" required />
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- الاسم من اربعة مقاطع -->
+
+                <div class="mb-3 row align-items-center">
+
+                    <div class="col-sm-4 text-sm-end">
+
+                        <label class="form-label fw-semibold">الاسم من اربعة مقاطع <span class="text-danger">*</span></label>
+
+                    </div>
+
+                    <div class="col-sm-8">
+
+                        <input type="text" id="field2" class="form-control custom-input required-field" placeholder="الاسم الرباعي" required />
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- التخصص الجامعي -->
+
+                <div class="mb-3 row align-items-center">
+
+                    <div class="col-sm-4 text-sm-end">
+
+                        <label class="form-label fw-semibold">التخصص الجامعي <span class="text-danger">*</span></label>
+
+                    </div>
+
+                    <div class="col-sm-8">
+
+                        <input type="text" id="field3" class="form-control custom-input required-field" placeholder="التخصص" required />
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- المعدل التراكمي -->
+
+                <div class="mb-3 row align-items-center">
+
+                    <div class="col-sm-4 text-sm-end">
+
+                        <label class="form-label fw-semibold">المعدل التراكمي <span class="text-danger">*</span></label>
+
+                    </div>
+
+                    <div class="col-sm-8">
+
+                        <input type="number" id="field4" step="0.01" min="0" max="100" class="form-control custom-input required-field" placeholder="مثال: 85.5" required />
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- معدل الثانوية العامة -->
+
+                <div class="mb-4 row align-items-center">
+
+                    <div class="col-sm-4 text-sm-end">
+
+                        <label class="form-label fw-semibold">معدل الثانوية العامة <span class="text-danger">*</span></label>
+
+                    </div>
+
+                    <div class="col-sm-8">
+
+                        <input type="number" id="field5" step="0.01" min="0" max="100" class="form-control custom-input required-field" placeholder="مثال: 90.2" required />
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- زر التالي -->
+
+                <div class="d-grid col-sm-8 ms-auto">
+
+                    <button type="button" id="nextBtn" class="btn btn-next text-white fw-semibold shadow-sm text-center">التالي</button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+
+</div>
+
+
+
+<!-- سكريبت التحقق -->
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const nextBtn = document.getElementById("nextBtn");
+
+        const requiredFields = document.querySelectorAll(".required-field");
+
+
+
+        nextBtn.addEventListener("click", function (e) {
+
+            let allFilled = true;
+
+
+
+            requiredFields.forEach(field => {
+
+                if (!field.value.trim()) {
+
+                    allFilled = false;
+
+                }
+
+            });
+
+
+
+            if (!allFilled) {
+
+                alert("الرجاء تعبئة جميع الحقول الإجبارية قبل الانتقال للخطوة التالية.");
+
+                e.preventDefault();
+
+            } else {
+
+                // تمرير قيمة isNew مع الانتقال للخطوة الثانية لكي تبقى محفوظة بين الخطوات
+
+                window.location.href = '@Url.Action("housing_form_step2", "Home", new { isNew = isNew })';
+
+            }
+
+        });
+
+    });
+
+</script>

@@ -1,0 +1,108 @@
+﻿@{
+    ViewData["Title"] = "لوحة تحكم المشرف";
+    Layout = "_HeaderAndFooter";
+}
+
+<div class="container my-5" style="max-width: 1000px; direction: rtl; text-align: right;">
+
+    <!-- عنوان الصفحة -->
+    <h3 class="fw-bold text-custom-blue mb-4">
+        نظام سكنات الجامعة الأردنية - لوحة المشرف
+    </h3>
+
+    <!-- شريط الإحصائيات والبحث العلوي (معدل: الإحصائيات يمين والبحث يسار) -->
+    <div class="row align-items-center mb-4 g-3">
+
+        <!-- بطاقات الإحصائيات (أصبحت على اليمين) -->
+        <div class="col-md-8 d-flex justify-content-start gap-3">
+            <div class="card border-0 shadow-sm rounded-pill px-4 py-2 bg-white d-flex flex-row align-items-center gap-3">
+                <i class="fas fa-clock fs-4 text-secondary"></i>
+                <div class="text-secondary small">
+                    <span>الطلبات المعلقة</span><br>
+                    <span>قيد المراجعة</span>
+                </div>
+                <span class="fs-4 fw-bold text-custom-blue">0</span>
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-pill px-4 py-2 bg-white d-flex flex-row align-items-center gap-3">
+                <i class="fas fa-users fs-4 text-secondary"></i>
+                <div class="text-secondary small">
+                    <span>إجمالي المقبولين</span><br>
+                    <span>في السكن</span>
+                </div>
+                <span class="fs-4 fw-bold text-custom-blue">0</span>
+            </div>
+        </div>
+
+        <!-- خانة البحث (أصبحت على اليسار) -->
+        <div class="col-md-4">
+            <div class="input-group">
+                <input type="text" class="form-control rounded-pill text-end px-3" placeholder="بحث عن طالبة..." aria-label="بحث">
+                <button class="btn btn-outline-secondary rounded-pill me-2 px-3" type="button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- جدول الطلبات -->
+    <div class="card shadow-sm border-0 rounded-4 bg-white p-3">
+        <div class="table-responsive">
+            <table class="table table-bordered text-center align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="py-3 text-custom-blue">الرقم الجامعي</th>
+                        <th class="py-3 text-custom-blue">اسم الطالبة</th>
+                        <th class="py-3 text-custom-blue">رؤية الطلب</th>
+                        <th class="py-3 text-custom-blue">تقييم الطلب</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-5">
+                            <i class="fas fa-folder-open fs-2 mb-2 d-block text-secondary"></i>
+                            لا توجد طلبات سكن جديدة قيد المراجعة حالياً.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- خيارات أسفل الجدول -->
+        <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap gap-3 px-2">
+
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-success px-4 rounded-pill fw-bold" disabled>قبول</button>
+                <button type="button" class="btn btn-danger px-4 rounded-pill fw-bold" disabled>رفض</button>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="selectAll" disabled>
+                <label class="form-check-label text-muted me-1" for="selectAll">
+                    تحديد جميع الطلبات
+                </label>
+            </div>
+
+            <!-- الترقيم -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination mb-0">
+                    <li class="page-item disabled"><a class="page-link text-muted" href="#">السابق</a></li>
+                    <li class="page-item active"><a class="page-link bg-custom-blue border-custom-blue text-white" href="#">1</a></li>
+                    <li class="page-item disabled"><a class="page-link text-muted" href="#">التالي</a></li>
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-custom-blue {
+        background-color: #2666AE !important;
+    }
+
+    .border-custom-blue {
+        border-color: #2666AE !important;
+    }
+</style>
