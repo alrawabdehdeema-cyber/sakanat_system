@@ -1,0 +1,196 @@
+﻿@model JREST.Models.HousingApplication
+
+@{
+    ViewData["Title"] = "طلب إلحاق الطالب بالسكن";
+    Layout = "_HeaderAndFooter";
+
+    // استقبال القيمة التي تحدد هل هو طلب جديد أم تجديد
+    bool isNew = ViewBag.IsNew ?? true;
+}
+
+<div class="container my-5" dir="rtl">
+
+    <!-- شريط التنبيه الأنيق (مخفي افتراضياً) -->
+    <div id="validationAlert" class="alert alert-danger alert-dismissible fade show d-none rounded-3 shadow-sm mb-4" role="alert">
+        <i class="fas fa-exclamation-circle ms-2"></i>
+        <span id="alertMessage">الرجاء تعبئة جميع الحقول الإجبارية قبل الانتقال للخطوة التالية.</span>
+        <button type="button" class="btn-close ms-auto me-0" onclick="hideValidationAlert()"></button>
+    </div>
+
+    <!-- عنوان الصفحة -->
+    <h3 class="text-custom-blue fw-bold mb-4 text-end">
+        @(isNew ? "طلب إلحاق الطالب بالسكن (طلب جديد)" : "طلب إلحاق الطالب بالسكن (تجديد / متابعة طلب)")
+    </h3>
+
+    <!-- شريط الخطوات (Stepper) -->
+    <div class="stepper-container mb-5">
+        <div class="d-flex align-items-center gap-2">
+            <a href="@Url.Action("housing_form", "Home", new { isNew = isNew })" class="step-circle text-decoration-none active">1</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step2", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">2</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step3", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">3</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step4", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">4</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step5", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">5</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step6", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">6</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step7", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">7</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step8", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">8</a>
+        </div>
+    </div>
+
+    <!-- نموذج إدخال البيانات -->
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <form id="step1Form" asp-action="housing_form" asp-controller="Home" method="post">
+
+                <!-- الرقم الجامعي -->
+                <div class="mb-3 row align-items-center">
+                    <div class="col-sm-4 text-sm-end">
+                        <label class="form-label fw-semibold">الرقم الجامعي <span class="text-danger">*</span></label>
+                    </div>
+                    <div class="col-sm-8">
+                        <input asp-for="UniversityId" id="universityIdInput" type="text" class="form-control custom-input required-field" placeholder="أدخل الرقم الجامعي (أرقام فقط)" required />
+                    </div>
+                </div>
+
+                <!-- الاسم من اربعة مقاطع -->
+                <div class="mb-3 row align-items-center">
+                    <div class="col-sm-4 text-sm-end">
+                        <label class="form-label fw-semibold">الاسم من اربعة مقاطع <span class="text-danger">*</span></label>
+                    </div>
+                    <div class="col-sm-8">
+                        <input asp-for="FullName" class="form-control custom-input required-field" placeholder="الاسم الرباعي" required />
+                    </div>
+                </div>
+
+                <!-- التخصص الجامعي -->
+                <div class="mb-3 row align-items-center">
+                    <div class="col-sm-4 text-sm-end">
+                        <label class="form-label fw-semibold">التخصص الجامعي <span class="text-danger">*</span></label>
+                    </div>
+                    <div class="col-sm-8">
+                        <input asp-for="Major" class="form-control custom-input required-field" placeholder="التخصص" required />
+                    </div>
+                </div>
+
+                <!-- المعدل التراكمي الجامعي (من 4.00) -->
+                <div class="mb-3 row align-items-center">
+                    <div class="col-sm-4 text-sm-end">
+                        <label class="form-label fw-semibold">المعدل التراكمي (من 4) <span class="text-danger">*</span></label>
+                    </div>
+                    <div class="col-sm-8">
+                        <input asp-for="Gpa" id="gpaInput" type="number" step="0.01" min="0" max="4" class="form-control custom-input required-field" placeholder="مثال: 3.45" required />
+                    </div>
+                </div>
+
+                <!-- معدل الثانوية العامة / التوجيهي (من 100) -->
+                <div class="mb-3 row align-items-center">
+                    <div class="col-sm-4 text-sm-end">
+                        <label class="form-label fw-semibold">معدل الثانوية العامة <span class="text-danger">*</span></label>
+                    </div>
+                    <div class="col-sm-8">
+                        <input asp-for="TawjihiGpa" id="tawjihiInput" type="number" step="0.01" min="0" max="100" class="form-control custom-input required-field" placeholder="مثال: 90.2" required />
+                    </div>
+                </div>
+
+                <!-- العام الدراسي -->
+                <div class="mb-4 row align-items-center">
+                    <div class="col-sm-4 text-sm-end">
+                        <label class="form-label fw-semibold">العام الدراسي</label>
+                    </div>
+                    <div class="col-sm-8">
+                        <input asp-for="AcademicYear"
+                               value="@ViewBag.CurrentAcademicYear"
+                               class="form-control custom-input bg-light text-muted"
+                               readonly />
+                    </div>
+                </div>
+
+                <!-- زر التالي -->
+                <div class="d-grid col-sm-8 ms-auto">
+                    <button type="button" id="nextBtn" class="btn btn-next text-white fw-semibold shadow-sm text-center">التالي</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<!-- سكريبت التحقق والفاليديشن مع شريط التنبيه الأنيق -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const nextBtn = document.getElementById("nextBtn");
+        const requiredFields = document.querySelectorAll(".required-field");
+        const form = document.getElementById("step1Form");
+        const universityIdInput = document.getElementById("universityIdInput");
+        const gpaInput = document.getElementById("gpaInput");
+        const tawjihiInput = document.getElementById("tawjihiInput");
+        const alertBox = document.getElementById("validationAlert");
+        const alertMessage = document.getElementById("alertMessage");
+
+        function showAlert(msg) {
+            alertMessage.textContent = msg;
+            alertBox.classList.remove("d-none");
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.hideValidationAlert = function() {
+            alertBox.classList.add("d-none");
+        }
+
+        if (nextBtn) {
+            nextBtn.addEventListener("click", function (e) {
+                let allFilled = true;
+
+                // 1. التحقق من الحقول الفارغة
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        allFilled = false;
+                    }
+                });
+
+                if (!allFilled) {
+                    showAlert("الرجاء تعبئة جميع الحقول الإجبارية قبل الانتقال للخطوة التالية.");
+                    e.preventDefault();
+                    return;
+                }
+
+                // 2. فاليديشن الرقم الجامعي (يجب أن يتكون من أرقام فقط)
+                const universityIdVal = universityIdInput.value.trim();
+                const numbersOnlyRegex = /^[0-9]+$/;
+                if (!numbersOnlyRegex.test(universityIdVal)) {
+                    showAlert("خطأ: الرقم الجامعي يجب أن يحتوي على أرقام فقط بدون أحرف أو رموز.");
+                    universityIdInput.focus();
+                    e.preventDefault();
+                    return;
+                }
+
+                // 3. فاليديشن المعدل التراكمي (ألا يزيد عن 4 ولا يقل عن 0)
+                const gpaVal = parseFloat(gpaInput.value);
+                if (isNaN(gpaVal) || gpaVal < 0 || gpaVal > 4.00) {
+                    showAlert("خطأ: المعدل التراكمي الجامعي يجب أن يكون قيمة بين 0.00 و 4.00.");
+                    gpaInput.focus();
+                    e.preventDefault();
+                    return;
+                }
+
+                // 4. فاليديشن معدل التوجيهي (ألا يزيد عن 100 ولا يقل عن 0)
+                const tawjihiVal = parseFloat(tawjihiInput.value);
+                if (isNaN(tawjihiVal) || tawjihiVal < 0 || tawjihiVal > 100.00) {
+                    showAlert("خطأ: معدل الثانوية العامة يجب ألا يتجاوز 100.00.");
+                    tawjihiInput.focus();
+                    e.preventDefault();
+                    return;
+                }
+
+                // إذا كل شيء سليم، يتم إرسال النموذج
+                form.submit();
+            });
+        }
+    });
+</script>

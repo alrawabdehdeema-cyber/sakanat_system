@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "الأسعار";
+    // هذا السطر هو السر لإظهار الهيدر والفوتر الكحلي الموحد تماماً
+    Layout = "_HeaderAndFooter";
+}
+
+<div class="container my-5" style="max-width: 900px; direction: rtl; text-align: right;">
+    <div class="card shadow-sm border-0 p-4 p-md-5 rounded-4 bg-white">
+
+        <!-- عنوان الصفحة -->
+        <h3 class="fw-bold text-custom-blue mb-4 pb-2 border-bottom">
+            نبذة عن سكن الطالبات
+        </h3>
+
+        <!-- الفقرات التوضيحية -->
+        <p class="text-secondary mb-3 fs-6" style="line-height: 1.8;">
+            يُعدُّ سكن الأندلس والزهراء الداخلي للطالبات أحد المرافق الخدمية التابعة للجامعة، ويهدف إلى توفير بيئة سكنية آمنة، مريحة، ومنظمة للطالبات، بما يدعم مسيرتهن الأكاديمية ويحقق لهن الاستقرار خلال فترة الدراسة.
+        </p>
+
+        <p class="text-secondary mb-4 fs-6" style="line-height: 1.8;">
+            يوفر السكن مجموعة من الغرف المجهزة بمستويات مختلفة لتناسب احتياجات الطالبات، وتشمل غرفًا مزدوجة، وغرفا وفق النظام الثلاثي، إضافة إلى المبيت المؤقت (ترانزيت)، وتُحدَّد الأجور الفصلية للسكن وفق نوع الغرفة.
+        </p>
+
+        <!-- جدول الأسعار -->
+        <div class="table-responsive mt-4">
+            <table class="table table-bordered text-center align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th class="py-3 text-custom-blue">نوع الغرفة</th>
+                        <th class="py-3">غرفة النظام الثنائي</th>
+                        <th class="py-3">غرفة النظام الثلاثي</th>
+                        <th class="py-3">استديو</th>
+                        <th class="py-3">المبيت المؤقت (ترانزيت)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <!-- تم تصحيح عنصر fw إلى td مع تنسيق مناسب -->
+                        <td class="fw-bold text-custom-blue py-3 bg-light">الأجُرة الفصلية بالدينار</td>
+                        <td class="py-3">250 دينار</td>
+                        <td class="py-3">150 دينار</td>
+                        <td class="py-3">300 دينار</td>
+                        <td class="py-3">10 دينار</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>

@@ -30,19 +30,99 @@ namespace JREST.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AcademicLevel")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AcademicYear")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AllergyDetails")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("AllowDayTrips")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AllowMultiDayTrips")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AllowTravelAbroad")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AllowWeekendLeave")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("BirthDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("BuildingNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("College")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DisabilityDetails")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("EnrollmentDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("FamilyBookPath")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Governorate")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("Gpa")
-                        .HasPrecision(5, 2)
-                        .HasColumnType("decimal(5,2)");
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("GuardianIdPath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("HasAllergy")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasAsthma")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasCancer")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasDiabetes")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasDisability")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasEpilepsy")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasHeartDisease")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasHypertension")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("HasPsychologicalDisorder")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("HealthCertificatePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HealthInsurance")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HousingName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HousingType")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Major")
                         .IsRequired()
@@ -52,8 +132,20 @@ namespace JREST.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("MedicalCareNeeded")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MedicineDetails")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Nationality")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("NeedsMedicine")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Neighborhood")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ParentPhone")
@@ -64,21 +156,41 @@ namespace JREST.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Penalties")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PledgeParentName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PledgeStudentName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PowerOfAttorneyPath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Religion")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Semester")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Street")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("StudentPhone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("StudyType")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("TawjihiGpa")
-                        .HasPrecision(5, 2)
-                        .HasColumnType("decimal(5,2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("UniversityId")
                         .IsRequired()
@@ -90,6 +202,29 @@ namespace JREST.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("HousingApplications");
+                });
+
+            modelBuilder.Entity("JREST.Models.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("JREST.Models.User", b =>

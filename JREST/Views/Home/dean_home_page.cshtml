@@ -1,44 +1,75 @@
-﻿@{
-    ViewData["Title"] = "لوحة تحكم المشرف";
+﻿@model IEnumerable<JREST.Models.HousingApplication>
+@{
+    ViewData["Title"] = "لوحة تحكم العميد";
     Layout = "_HeaderAndFooter";
+
+    int deanPendingCount = ViewBag.DeanPendingCount ?? 0;
+    int deanApprovedCount = ViewBag.DeanApprovedCount ?? 0;
+    int deanRejectedCount = ViewBag.DeanRejectedCount ?? 0;
+    string currentFilter = ViewBag.CurrentFilter ?? "مقبول مبدئياً";
+
+    // هل نحن في عرض الطلبات المعلقة؟ (لتحديد ظهور مربعات الاختيار وأزرار العمليات الجماعية)
+    bool isPendingView = (currentFilter == "مقبول مبدئياً");
 }
 
-<div class="container my-5" style="max-width: 1000px; direction: rtl; text-align: right;">
+<div class="container my-5" style="max-width: 1200px; direction: rtl; text-align: right;">
 
     <!-- عنوان الصفحة -->
-    <h3 class="fw-bold text-custom-blue mb-4">
-        نظام سكنات الجامعة الأردنية - لوحة المشرف
-    </h3>
+    <div class="mb-4">
+        <h3 class="fw-bold text-custom-blue m-0">
+            نظام سكنات الجامعة الأردنية - لوحة العميد
+        </h3>
+    </div>
 
-    <!-- شريط الإحصائيات والبحث العلوي (معدل: الإحصائيات يمين والبحث يسار) -->
+    <!-- شريط الإحصائيات التفاعلية والبحث العلوي -->
     <div class="row align-items-center mb-4 g-3">
 
-        <!-- بطاقات الإحصائيات (أصبحت على اليمين) -->
-        <div class="col-md-8 d-flex justify-content-start gap-3">
-            <div class="card border-0 shadow-sm rounded-pill px-4 py-2 bg-white d-flex flex-row align-items-center gap-3">
-                <i class="fas fa-clock fs-4 text-secondary"></i>
-                <div class="text-secondary small">
-                    <span>الطلبات المعلقة</span><br>
-                    <span>قيد المراجعة</span>
-                </div>
-                <span class="fs-4 fw-bold text-custom-blue">0</span>
-            </div>
+        <!-- بطاقات الإحصائيات التفاعلية الخاصة بالعميد -->
+        <div class="col-md-8 d-flex justify-content-start gap-3 flex-wrap">
 
-            <div class="card border-0 shadow-sm rounded-pill px-4 py-2 bg-white d-flex flex-row align-items-center gap-3">
-                <i class="fas fa-users fs-4 text-secondary"></i>
-                <div class="text-secondary small">
-                    <span>إجمالي المقبولين</span><br>
-                    <span>في السكن</span>
+            <!-- بطاقة الطلبات المعلقة (بانتظار قرار العميد) -->
+            <a href="@Url.Action("dean_home_page", "Home", new { status = "مقبول مبدئياً" })" class="text-decoration-none">
+                <div class="card border-0 shadow-sm rounded-pill px-4 py-2 bg-white d-flex flex-row align-items-center gap-3 filter-card @(currentFilter == "مقبول مبدئياً" ? "active-filter-pending" : "")">
+                    <i class="fas fa-clock fs-4 text-secondary"></i>
+                    <div class="text-secondary small">
+                        <span class="fw-semibold">الطلبات المعلقة</span><br>
+                        <span>بانتظار قرارك</span>
+                    </div>
+                    <span class="fs-4 fw-bold text-custom-blue">@deanPendingCount</span>
                 </div>
-                <span class="fs-4 fw-bold text-custom-blue">0</span>
-            </div>
+            </a>
+
+            <!-- بطاقة المقبولين نهائياً -->
+            <a href="@Url.Action("dean_home_page", "Home", new { status = "مقبول" })" class="text-decoration-none">
+                <div class="card border-0 shadow-sm rounded-pill px-4 py-2 bg-white d-flex flex-row align-items-center gap-3 filter-card @(currentFilter == "مقبول" ? "active-filter-approved" : "")">
+                    <i class="fas fa-check-circle fs-4 text-success"></i>
+                    <div class="text-secondary small">
+                        <span class="fw-semibold">إجمالي المقبولين</span><br>
+                        <span>نهائياً في السكن</span>
+                    </div>
+                    <span class="fs-4 fw-bold text-success">@deanApprovedCount</span>
+                </div>
+            </a>
+
+            <!-- بطاقة المرفوضة من العميد -->
+            <a href="@Url.Action("dean_home_page", "Home", new { status = "مرفوض من العميد" })" class="text-decoration-none">
+                <div class="card border-0 shadow-sm rounded-pill px-4 py-2 bg-white d-flex flex-row align-items-center gap-3 filter-card @(currentFilter == "مرفوض من العميد" ? "active-filter-rejected" : "")">
+                    <i class="fas fa-times-circle fs-4 text-danger"></i>
+                    <div class="text-secondary small">
+                        <span class="fw-semibold">الطلبات المرفوضة</span><br>
+                        <span>من قبلك</span>
+                    </div>
+                    <span class="fs-4 fw-bold text-danger">@deanRejectedCount</span>
+                </div>
+            </a>
+
         </div>
 
-        <!-- خانة البحث (أصبحت على اليسار) -->
+        <!-- خانة البحث الفوري -->
         <div class="col-md-4">
             <div class="input-group">
-                <input type="text" class="form-control rounded-pill text-end px-3" placeholder="بحث عن طالبة..." aria-label="بحث">
-                <button class="btn btn-outline-secondary rounded-pill me-2 px-3" type="button">
+                <input type="text" id="searchInput" class="form-control rounded-pill text-end px-3" placeholder="بحث عن طالبة (الاسم أو الرقم)..." aria-label="بحث">
+                <button class="btn btn-outline-secondary rounded-pill me-2 px-3" type="button" id="searchBtn">
                     <i class="fas fa-search"></i>
                 </button>
             </div>
@@ -46,56 +77,293 @@
 
     </div>
 
-    <!-- جدول الطلبات -->
-    <div class="card shadow-sm border-0 rounded-4 bg-white p-3">
-        <div class="table-responsive">
-            <table class="table table-bordered text-center align-middle mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th class="py-3 text-custom-blue">الرقم الجامعي</th>
-                        <th class="py-3 text-custom-blue">اسم الطالبة</th>
-                        <th class="py-3 text-custom-blue">رؤية الطلب</th>
-                        <th class="py-3 text-custom-blue">تقييم الطلب</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td colspan="4" class="text-center text-muted py-5">
-                            <i class="fas fa-folder-open fs-2 mb-2 d-block text-secondary"></i>
-                            لا توجد طلبات سكن جديدة قيد المراجعة حالياً.
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <!-- نموذج يحوي جدول الطلبات والعمليات الجماعية -->
+    <form id="bulkActionForm" method="post">
+        <div class="card shadow-sm border-0 rounded-4 bg-white p-3">
+            <div class="table-responsive">
+                <table class="table table-bordered text-center align-middle mb-0" id="applicationsTable">
+                    <thead class="table-light">
+                        <tr>
+                            @if (isPendingView)
+                            {
+                                <th style="width: 45px;" class="py-3 text-custom-blue">تحديد</th>
+                            }
+                            <th class="py-3 text-custom-blue">الرقم الجامعي</th>
+                            <th class="py-3 text-custom-blue">اسم الطالبة</th>
+                            <th class="py-3 text-custom-blue">تاريخ تقديم الطلب</th>
+                            <th class="py-3 text-custom-blue">الحالة الحالية</th>
+                            <th class="py-3 text-custom-blue">رؤية الطلب</th>
+                            <th class="py-3 text-custom-blue">تقييم الطلب</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    @if (isPendingView)
+                                    {
+                                        <td>
+                                            <input class="form-check-input request-checkbox" type="checkbox" name="selectedIds" value="@item.Id" />
+                                        </td>
+                                    }
+                                    <td>@item.UniversityId</td>
+                                    <td>@item.FullName</td>
+                                    <td>@item.SubmissionDate.ToString("yyyy-MM-dd")</td>
+                                    <td>
+                                        @if (item.Status == "مقبول")
+                                        {
+                                            <span class="badge bg-success rounded-pill px-3 py-2">مقبول نهائياً</span>
+                                        }
+                                        else if (item.Status == "مرفوض من العميد")
+                                        {
+                                            <span class="badge bg-danger rounded-pill px-3 py-2">مرفوض من العميد</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning text-dark rounded-pill px-3 py-2">بانتظار القرار</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("view_student_request", "Home", new { id = item.Id })" class="btn btn-sm btn-outline-secondary fw-bold rounded-pill px-3">اضغط هنا</a>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex justify-content-center gap-2">
+                                            @if (item.Status == "مقبول مبدئياً")
+                                            {
+                                                <!-- زر القبول النهائي الفردي بـ SweetAlert2 -->
+                                                <button type="button" class="btn btn-success btn-sm px-3 rounded-pill fw-semibold" onclick="confirmDeanApprove(@item.Id, '@item.FullName')">قبول نهائي</button>
 
-        <!-- خيارات أسفل الجدول -->
-        <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap gap-3 px-2">
-
-            <div class="d-flex gap-2">
-                <button type="button" class="btn btn-success px-4 rounded-pill fw-bold" disabled>قبول</button>
-                <button type="button" class="btn btn-danger px-4 rounded-pill fw-bold" disabled>رفض</button>
+                                                <!-- زر الرفض الفردي بـ SweetAlert2 -->
+                                                <button type="button" class="btn btn-danger btn-sm px-3 rounded-pill fw-semibold" onclick="confirmDeanReject('@Url.Action("rejection_reason", "Home", new { id = item.Id })')">رفض</button>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted small">تم اتخاذ القرار</span>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr id="noDataRow">
+                                <td colspan="@(isPendingView ? 7 : 6)" class="text-center text-muted py-5">
+                                    <i class="fas fa-folder-open fs-2 mb-2 d-block text-secondary"></i>
+                                    لا توجد طلبات سكن مطابقة للفلتر المحدد حالياً.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
 
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="selectAll" disabled>
-                <label class="form-check-label text-muted me-1" for="selectAll">
-                    تحديد جميع الطلبات
-                </label>
+            <!-- شريط التحديد الجماعي والأزرار المرتبة في الأسفل -->
+            <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap gap-3 px-2">
+
+                @if (isPendingView)
+                {
+                    <div class="d-flex align-items-center gap-2">
+                        <input class="form-check-input m-0" type="checkbox" id="selectAllFooter" style="width: 1.2rem; height: 1.2rem; cursor: pointer;">
+                        <label class="form-check-label text-dark fw-semibold" for="selectAllFooter" style="cursor: pointer; user-select: none;">
+                            تحديد جميع الطلبات الظاهرة
+                        </label>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="button" id="bulkApproveBtn" class="btn btn-success btn-sm fw-semibold px-3 py-2 rounded-pill shadow-sm">
+                            <i class="fas fa-check-double ms-1"></i> قبول المحددة
+                        </button>
+                        <button type="button" id="bulkRejectBtn" class="btn btn-danger btn-sm fw-semibold px-3 py-2 rounded-pill shadow-sm">
+                            <i class="fas fa-times-circle ms-1"></i> رفض المحددة
+                        </button>
+                    </div>
+                }
+                else
+                {
+                    <div></div>
+                }
+
+                <nav aria-label="Page navigation">
+                    <ul class="pagination pagination-sm mb-0">
+                        <li class="page-item disabled"><a class="page-link text-muted" href="#">السابق</a></li>
+                        <li class="page-item active"><a class="page-link bg-custom-blue border-custom-blue text-white" href="#">1</a></li>
+                        <li class="page-item disabled"><a class="page-link text-muted" href="#">التالي</a></li>
+                    </ul>
+                </nav>
             </div>
 
-            <!-- الترقيم -->
-            <nav aria-label="Page navigation">
-                <ul class="pagination mb-0">
-                    <li class="page-item disabled"><a class="page-link text-muted" href="#">السابق</a></li>
-                    <li class="page-item active"><a class="page-link bg-custom-blue border-custom-blue text-white" href="#">1</a></li>
-                    <li class="page-item disabled"><a class="page-link text-muted" href="#">التالي</a></li>
-                </ul>
-            </nav>
-
         </div>
-    </div>
+    </form>
 </div>
+
+<!-- سكريبت SweetAlert2 والتفاعلات المحدثة للعميد -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const selectAllFooter = document.getElementById("selectAllFooter");
+        const checkboxes = document.querySelectorAll(".request-checkbox");
+        const bulkApproveBtn = document.getElementById("bulkApproveBtn");
+        const bulkRejectBtn = document.getElementById("bulkRejectBtn");
+        const bulkActionForm = document.getElementById("bulkActionForm");
+
+        // شيك بوكس التحديد العام
+        if (selectAllFooter) {
+            selectAllFooter.addEventListener("change", function () {
+                const status = this.checked;
+                checkboxes.forEach(cb => {
+                    if (cb.closest("tr").style.display !== "none") {
+                        cb.checked = status;
+                    }
+                });
+            });
+        }
+
+        // 1. تأكيد القبول الفردي النهائي
+        window.confirmDeanApprove = function(id, studentName) {
+            Swal.fire({
+                title: 'تأكيد القبول النهائي',
+                text: `هل أنت متأكد من قبول طلب الطالبة (${studentName}) نهائياً؟`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#198754',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'نعم، قبول نهائي',
+                cancelButtonText: 'إلغاء',
+                customClass: { popup: 'rounded-4 shadow' }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let form = document.createElement('form');
+                    form.method = 'post';
+                    form.action = '@Url.Action("DeanApproveApplication", "Home")?id=' + id;
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        };
+
+        // 2. تأكيد الرفض الفردي والانتقال لتسجيل السبب
+        window.confirmDeanReject = function(targetUrl) {
+            Swal.fire({
+                title: 'تأكيد الرفض',
+                text: 'هل أنت متأكد من رفض الطلب والانتقال لتسجيل سبب الرفض؟',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'نعم، انتقل لتسجيل السبب',
+                cancelButtonText: 'إلغاء',
+                customClass: { popup: 'rounded-4 shadow' }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = targetUrl;
+                }
+            });
+        };
+
+        // 3. القبول الجماعي للمحدد
+        if (bulkApproveBtn) {
+            bulkApproveBtn.addEventListener("click", function () {
+                const checkedCount = document.querySelectorAll(".request-checkbox:checked").length;
+                if (checkedCount === 0) {
+                    Swal.fire({
+                        title: 'تنبيه',
+                        text: 'الرجاء تحديد طلب واحد على الأقل أولاً!',
+                        icon: 'warning',
+                        confirmButtonColor: '#2666AE',
+                        customClass: { popup: 'rounded-4 shadow' }
+                    });
+                    return;
+                }
+
+                Swal.fire({
+                    title: 'تأكيد القبول الجماعي',
+                    text: `هل أنت متأكد من قبول جميع الطلبات المحددة (${checkedCount}) نهائياً؟`,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#198754',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'نعم، قبول المحددة',
+                    cancelButtonText: 'إلغاء',
+                    customClass: { popup: 'rounded-4 shadow' }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        bulkActionForm.action = '@Url.Action("DeanApproveMultiple", "Home")';
+                        bulkActionForm.submit();
+                    }
+                });
+            });
+        }
+
+        // 4. الرفض الجماعي للمحدد
+        if (bulkRejectBtn) {
+            bulkRejectBtn.addEventListener("click", function () {
+                const checkedCount = document.querySelectorAll(".request-checkbox:checked").length;
+                if (checkedCount === 0) {
+                    Swal.fire({
+                        title: 'تنبيه',
+                        text: 'الرجاء تحديد طلب واحد على الأقل أولاً!',
+                        icon: 'warning',
+                        confirmButtonColor: '#2666AE',
+                        customClass: { popup: 'rounded-4 shadow' }
+                    });
+                    return;
+                }
+
+                Swal.fire({
+                    title: 'تأكيد الرفض الجماعي',
+                    text: `هل أنت متأكد من رفض جميع الطلبات المحددة (${checkedCount})؟`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc3545',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'نعم، رفض المحددة',
+                    cancelButtonText: 'إلغاء',
+                    customClass: { popup: 'rounded-4 shadow' }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        bulkActionForm.action = '@Url.Action("DeanRejectMultiple", "Home")';
+                        bulkActionForm.submit();
+                    }
+                });
+            });
+        }
+
+        // سكريبت البحث الفوري (Live Search)
+        const searchInput = document.getElementById("searchInput");
+        const table = document.getElementById("applicationsTable");
+        if (searchInput && table) {
+            const tbody = table.getElementsByTagName("tbody")[0];
+            const rows = tbody.getElementsByTagName("tr");
+
+            searchInput.addEventListener("keyup", function () {
+                const filter = searchInput.value.toLowerCase().trim();
+
+                for (let i = 0; i < rows.length; i++) {
+                    if (rows[i].id === "noDataRow") continue;
+
+                    const idIndex = @(isPendingView ? 1 : 0);
+                    const nameIndex = @(isPendingView ? 2 : 1);
+
+                    const universityIdCell = rows[i].getElementsByTagName("td")[idIndex];
+                    const nameCell = rows[i].getElementsByTagName("td")[nameIndex];
+
+                    if (universityIdCell && nameCell) {
+                        const universityIdText = universityIdCell.textContent || universityIdCell.innerText;
+                        const nameText = nameCell.textContent || nameCell.innerText;
+
+                        if (universityIdText.toLowerCase().includes(filter) || nameText.toLowerCase().includes(filter)) {
+                            rows[i].style.display = "";
+                        } else {
+                            rows[i].style.display = "none";
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
 
 <style>
     .bg-custom-blue {
@@ -104,5 +372,35 @@
 
     .border-custom-blue {
         border-color: #2666AE !important;
+    }
+
+    .text-custom-blue {
+        color: #2666AE !important;
+    }
+
+    .filter-card {
+        transition: all 0.25s ease-in-out;
+        cursor: pointer;
+        border: 2px solid transparent !important;
+    }
+
+        .filter-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.12) !important;
+        }
+
+    .active-filter-pending {
+        border: 2px solid #2666AE !important;
+        background-color: #f0f7ff !important;
+    }
+
+    .active-filter-approved {
+        border: 2px solid #198754 !important;
+        background-color: #f0fff4 !important;
+    }
+
+    .active-filter-rejected {
+        border: 2px solid #dc3545 !important;
+        background-color: #fff5f5 !important;
     }
 </style>

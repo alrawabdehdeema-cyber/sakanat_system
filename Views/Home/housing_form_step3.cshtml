@@ -1,0 +1,192 @@
+﻿@model JREST.Models.HousingApplication
+
+@{
+    ViewData["Title"] = "طلب إلحاق الطالب بالسكن - الخطوة الثالثة";
+    Layout = "_HeaderAndFooter";
+
+    bool isNew = ViewBag.IsNew ?? true;
+    string currentAcademicYear = ViewBag.CurrentAcademicYear ?? "2026/2027";
+    string currentSemester = ViewBag.CurrentSemester ?? "الأول";
+}
+
+<div class="container my-5" dir="rtl">
+
+    <!-- عنوان الصفحة -->
+    <h3 class="text-custom-blue fw-bold mb-4 text-end">
+        @(isNew ? "طلب إلحاق الطالب بالسكن (طلب جديد)" : "طلب إلحاق الطالب بالسكن (تجديد / متابعة طلب)")
+    </h3>
+
+    <!-- شريط الخطوات (Stepper) -->
+    <div class="stepper-container mb-5">
+        <div class="d-flex align-items-center gap-2">
+            <a href="@Url.Action("housing_form", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">1</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step2", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">2</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step3", "Home", new { isNew = isNew })" class="step-circle text-decoration-none active">3</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step4", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">4</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step5", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">5</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step6", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">6</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step7", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">7</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step8", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">8</a>
+        </div>
+    </div>
+
+    <!-- نموذج إدخال البيانات -->
+    <div class="row justify-content-center">
+        <div class="col-md-9 col-lg-8">
+            <form id="step3Form" asp-action="SaveStep3" asp-controller="Home" method="post">
+                <input type="hidden" name="isNew" value="@(isNew ? "true" : "false")" />
+
+                <!-- العام الدراسي والفصل الدراسي (حقول تلقائية مقفلة) -->
+                <div class="row mb-3">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <label class="form-label fw-semibold">العام الدراسي</label>
+                        <input type="text"
+                               class="form-control custom-input bg-light text-muted fw-bold text-center"
+                               value="@currentAcademicYear"
+                               readonly />
+                        <input type="hidden" name="academicYear" value="@currentAcademicYear" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">الفصل الدراسي</label>
+                        <input type="text"
+                               class="form-control custom-input bg-light text-muted fw-bold text-center"
+                               value="@currentSemester"
+                               readonly />
+                        <input type="hidden" name="semester" value="@currentSemester" />
+                    </div>
+                </div>
+
+                <!-- المستوى الأكاديمي (بشكل نظيف بدون سهم ومنع الكتابة الحرة) -->
+                <div class="mb-3 row align-items-center">
+                    <div class="col-sm-4 text-sm-end">
+                        <label class="form-label fw-semibold">المستوى الأكاديمي <span class="text-danger">*</span></label>
+                    </div>
+                    <div class="col-sm-8">
+                        <input name="academicLevel" class="form-control custom-input required-field" list="academicLevelOptions" placeholder="اختر المستوى الأكاديمي" onkeydown="return false;" required />
+                        <datalist id="academicLevelOptions">
+                            <option value="سنة أولى"></option>
+                            <option value="سنة ثانية"></option>
+                            <option value="سنة ثالثة"></option>
+                            <option value="سنة رابعة"></option>
+                            <option value="سنة خامسة"></option>
+                            <option value="سنة سادسة فما فوق"></option>
+                        </datalist>
+                    </div>
+                </div>
+
+                <!-- اسم السكن المطلوب (سكن الأندلس وسكن الزهراء فقط - بدون سهم ومنع الكتابة) -->
+                <div class="mb-3 row align-items-center">
+                    <div class="col-sm-4 text-sm-end">
+                        <label class="form-label fw-semibold">اسم السكن المطلوب <span class="text-danger">*</span></label>
+                    </div>
+                    <div class="col-sm-8">
+                        <input name="housingName" class="form-control custom-input required-field" list="housingNameOptions" placeholder="اختر اسم السكن" onkeydown="return false;" required />
+                        <datalist id="housingNameOptions">
+                            <option value="سكن الأندلس"></option>
+                            <option value="سكن الزهراء"></option>
+                        </datalist>
+                    </div>
+                </div>
+
+                <!-- نوع الدراسة (بدون سهم ومنع الكتابة الحرة) -->
+                <div class="mb-3 row align-items-center">
+                    <div class="col-sm-4 text-sm-end">
+                        <label class="form-label fw-semibold">نوع الدراسة <span class="text-danger">*</span></label>
+                    </div>
+                    <div class="col-sm-8">
+                        <input name="studyType" class="form-control custom-input required-field" list="studyTypeOptions" placeholder="اختر برنامج الدراسة" onkeydown="return false;" required />
+                        <datalist id="studyTypeOptions">
+                            <option value="تنافس"></option>
+                            <option value="موازي"></option>
+                            <option value="دولي"></option>
+                        </datalist>
+                    </div>
+                </div>
+
+                <!-- الكلية (بدون سهم ومنع الكتابة الحرة) -->
+                <div class="mb-3 row align-items-center">
+                    <div class="col-sm-4 text-sm-end">
+                        <label class="form-label fw-semibold">الكلية <span class="text-danger">*</span></label>
+                    </div>
+                    <div class="col-sm-8">
+                        <input name="college" class="form-control custom-input required-field" list="collegeOptions" placeholder="اختر اسم الكلية" onkeydown="return false;" required />
+                        <datalist id="collegeOptions">
+                            <option value="كلية الملك عبد الله الثاني لتكنولوجيا المعلومات"></option>
+                            <option value="كلية الهندسة والتكنولوجيا"></option>
+                            <option value="كلية الطب"></option>
+                            <option value="كلية طب الأسنان"></option>
+                            <option value="كلية الصيدلة"></option>
+                            <option value="كلية العلوم"></option>
+                            <option value="كلية التمريض"></option>
+                            <option value="كلية العلوم الطبية التطبيقية"></option>
+                            <option value="كلية الحقوق"></option>
+                            <option value="كلية الأعمال"></option>
+                            <option value="كلية الآداب"></option>
+                            <option value="كلية اللغات الأجنبية"></option>
+                            <option value="كلية العلوم التربوية"></option>
+                            <option value="كلية الشريعة والدراسات الإسلامية"></option>
+                            <option value="كلية الفنون والتصميم"></option>
+                            <option value="كلية الزراعة"></option>
+                            <option value="كلية ألعاب الرياضية والتربية البدنية"></option>
+                            <option value="كلية الدراسات العليا"></option>
+                        </datalist>
+                    </div>
+                </div>
+
+                <!-- العقوبات الانضباطية (بدون سهم ومنع الكتابة الحرة) -->
+                <div class="mb-3 row align-items-center">
+                    <div class="col-sm-4 text-sm-end">
+                        <label class="form-label fw-semibold">هل صدر بحقك عقوبات؟ <span class="text-danger">*</span></label>
+                    </div>
+                    <div class="col-sm-8">
+                        <input name="penalties" class="form-control custom-input required-field" list="penaltiesOptions" placeholder="اختر حالة العقوبات" onkeydown="return false;" required />
+                        <datalist id="penaltiesOptions">
+                            <option value="لا يوجد"></option>
+                            <option value="إنذار أول"></option>
+                            <option value="إنذار نهائي"></option>
+                        </datalist>
+                    </div>
+                </div>
+
+                <!-- التعهد -->
+                <div class="mb-3 row align-items-center">
+                    <div class="col-12 d-flex align-items-center gap-2 flex-wrap">
+                        <span class="fw-semibold">أقر أنا الطالبة</span>
+                        <input name="pledgeStudentName"
+                               class="form-control custom-input d-inline-block text-center rounded-pill fw-bold"
+                               style="width: 240px;"
+                               value="@(Model?.FullName ?? "")"
+                               placeholder="يرجى كتابة اسم الطالبة"
+                               required />
+                        <span class="fw-semibold">بموافقة ولي أمري السيد</span>
+                    </div>
+                </div>
+
+                <div class="mb-4 row align-items-center">
+                    <div class="col-12 d-flex align-items-center gap-2 flex-wrap">
+                        <input name="pledgeParentName"
+                               class="form-control custom-input d-inline-block text-center rounded-pill"
+                               style="width: 240px;"
+                               placeholder="يرجى كتابة اسم ولي الأمر"
+                               required />
+                        <span class="fw-semibold">بتحمل المسؤولية القانونية أمام إدارة الجامعة.</span>
+                    </div>
+                </div>
+
+                <!-- أزرار التنقل -->
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="@Url.Action("housing_form_step2", "Home", new { isNew = isNew })" class="btn btn-secondary px-4 fw-semibold shadow-sm text-decoration-none">السابق</a>
+                    <button type="submit" class="btn btn-next text-white px-4 fw-semibold shadow-sm">التالي</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

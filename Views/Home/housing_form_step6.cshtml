@@ -1,0 +1,111 @@
+﻿@{
+    ViewData["Title"] = "طلب إلحاق الطالب بالسكن - الخطوة 6";
+    Layout = "_HeaderAndFooter";
+
+    bool isNew = ViewBag.IsNew ?? true;
+}
+
+<div class="container my-5" dir="rtl">
+
+    <!-- عنوان الصفحة -->
+    <h3 class="text-custom-blue fw-bold mb-4 text-end">طلب إلحاق الطالب بالسكن</h3>
+
+    <!-- شريط الخطوات (Stepper) -->
+    <div class="stepper-container mb-5">
+        <div class="d-flex align-items-center gap-2">
+            <!-- الخطوة 1 -->
+            <a href="@Url.Action("housing_form", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">1</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 2 -->
+            <a href="@Url.Action("housing_form_step2", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">2</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 3 -->
+            <a href="@Url.Action("housing_form_step3", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">3</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 4 -->
+            <a href="@Url.Action("housing_form_step4", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">4</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 5 -->
+            <a href="@Url.Action("housing_form_step5", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">5</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 6 (الحالية) -->
+            <a href="@Url.Action("housing_form_step6", "Home", new { isNew = isNew })" class="step-circle text-decoration-none active">6</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 7 -->
+            <a href="@Url.Action("housing_form_step7", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">7</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 8 -->
+            <a href="@Url.Action("housing_form_step8", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">8</a>
+        </div>
+    </div>
+
+    <!-- نموذج إدخال بيانات الخطوة السادسة -->
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <form id="step6Form" asp-action="SaveStep6" asp-controller="Home" method="post">
+                <input type="hidden" name="isNew" value="@isNew.ToString()" />
+
+                <h5 class="fw-bold mb-4 text-end">اختر الأمراض التي تنطبق عليك</h5>
+
+                <div class="d-flex flex-column gap-3 mb-5">
+                    <!-- ارتفاع ضغط الدم -->
+                    <div class="form-check d-flex align-items-center gap-2 ps-0">
+                        <input class="form-check-input m-0" type="checkbox" name="HasHypertension" id="disease1" value="true">
+                        <label class="form-check-label" for="disease1">ارتفاع ضغط الدم</label>
+                    </div>
+
+                    <!-- الاضطراب النفسي -->
+                    <div class="form-check d-flex align-items-center gap-2 ps-0">
+                        <input class="form-check-input m-0" type="checkbox" name="HasPsychologicalDisorder" id="disease2" value="true">
+                        <label class="form-check-label" for="disease2">الاضطراب النفسي</label>
+                    </div>
+
+                    <!-- الأمراض القلبية -->
+                    <div class="form-check d-flex align-items-center gap-2 ps-0">
+                        <input class="form-check-input m-0" type="checkbox" name="HasHeartDisease" id="disease3" value="true">
+                        <label class="form-check-label" for="disease3">الأمراض القلبية</label>
+                    </div>
+
+                    <!-- الصرع -->
+                    <div class="form-check d-flex align-items-center gap-2 ps-0">
+                        <input class="form-check-input m-0" type="checkbox" name="HasEpilepsy" id="disease4" value="true">
+                        <label class="form-check-label" for="disease4">الصرع</label>
+                    </div>
+
+                    <!-- السكري -->
+                    <div class="form-check d-flex align-items-center gap-2 ps-0">
+                        <input class="form-check-input m-0" type="checkbox" name="HasDiabetes" id="disease5" value="true">
+                        <label class="form-check-label" for="disease5">السكري</label>
+                    </div>
+
+                    <!-- الربو -->
+                    <div class="form-check d-flex align-items-center gap-2 ps-0">
+                        <input class="form-check-input m-0" type="checkbox" name="HasAsthma" id="disease6" value="true">
+                        <label class="form-check-label" for="disease6">الربو</label>
+                    </div>
+
+                    <!-- السرطان -->
+                    <div class="form-check d-flex align-items-center gap-2 ps-0">
+                        <input class="form-check-input m-0" type="checkbox" name="HasCancer" id="disease7" value="true">
+                        <label class="form-check-label" for="disease7">السرطان</label>
+                    </div>
+                </div>
+
+                <!-- أزرار السابق والتالي -->
+                <div class="d-flex justify-content-between">
+                    <a href="@Url.Action("housing_form_step5", "Home", new { isNew = isNew })" class="btn btn-secondary px-4 fw-semibold shadow-sm text-decoration-none">السابق</a>
+                    <button type="submit" class="btn btn-next text-white px-4 fw-semibold shadow-sm">التالي</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>

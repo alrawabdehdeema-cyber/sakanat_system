@@ -1,0 +1,113 @@
+﻿@{
+    ViewData["Title"] = "سبب رفض الطلب";
+    Layout = "_HeaderAndFooter";
+
+    int appId = ViewBag.ApplicationId ?? 0;
+}
+
+<div class="container my-5" dir="rtl">
+
+    <!-- عنوان الصفحة مع أيقونة رسائل -->
+    <div class="d-flex align-items-center justify-content-center mb-4">
+        <h3 class="text-custom-blue fw-bold mb-0">
+            <i class="bi bi-chat-dots-fill ms-2"></i> سبب رفض الطلب
+        </h3>
+    </div>
+
+    <!-- شريط التنبيه الموحد (أحمر للأخطاء / أخضر للنجاح) -->
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div id="actionAlert" class="alert alert-dismissible fade show text-center shadow-sm rounded-3 py-2 mb-4 d-none" role="alert" style="font-weight: 600;">
+                <i id="alertIcon" class="fas fa-exclamation-circle ms-2"></i>
+                <span id="alertText"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- نموذج إدخال سبب الرفض -->
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <form id="rejectionReasonForm">
+                <input type="hidden" id="appId" value="@appId" />
+
+                <!-- حقل نص سبب الرفض -->
+                <div class="mb-4">
+                    <textarea id="reasonText" rows="6" class="form-control custom-input required-field text-end" placeholder="اكتب سبب رفض الطالبة هنا..." required></textarea>
+                </div>
+
+                <!-- زر الإرسال -->
+                <div class="d-grid col-sm-6 mx-auto">
+                    <button type="button" id="sendBtn" class="btn btn-next text-white fw-semibold shadow-sm py-2">إرسال وإشعار الطالبة</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<!-- سكريبت الإرسال وتحديث التنبيهات -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const sendBtn = document.getElementById("sendBtn");
+        const reasonText = document.getElementById("reasonText");
+        const appId = document.getElementById("appId").value;
+        const actionAlert = document.getElementById("actionAlert");
+        const alertText = document.getElementById("alertText");
+        const alertIcon = document.getElementById("alertIcon");
+
+        function showAlert(message, type = "danger") {
+            alertText.textContent = message;
+            actionAlert.className = "alert alert-dismissible fade show text-center shadow-sm rounded-3 py-2 mb-4";
+
+            if (type === "success") {
+                actionAlert.classList.add("alert-success");
+                alertIcon.className = "fas fa-check-circle ms-2";
+            } else {
+                actionAlert.classList.add("alert-danger");
+                alertIcon.className = "fas fa-exclamation-circle ms-2";
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        sendBtn.addEventListener("click", function () {
+            const reason = reasonText.value.trim();
+
+            if (!reason) {
+                showAlert("الرجاء كتابة سبب الرفض قبل الإرسال.", "danger");
+                reasonText.focus();
+                return;
+            }
+
+            // إرسال البيانات عبر Fetch API للكنترولر
+            fetch('/Home/SubmitRejectionReason', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `id=${appId}&reason=${encodeURIComponent(reason)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showAlert("تم إرسال سبب الرفض وإشعار الطالبة بنجاح!", "success");
+                    setTimeout(function() {
+                        window.location.href = '@Url.Action("head_home_page", "Home")';
+                    }, 1200); // الانتقال بعد ثانية وربع ليتمكن المستخدم من قراءة رسالة النجاح الخضراء
+                } else {
+                    showAlert("حدث خطأ: " + data.message, "danger");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showAlert("حدث خطأ أثناء الاتصال بالخادم.", "danger");
+            });
+        });
+    });
+</script>
+
+<style>
+    .text-custom-blue {
+        color: #2666AE !important;
+    }
+</style>

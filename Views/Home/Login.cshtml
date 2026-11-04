@@ -1,0 +1,77 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>تسجيل الدخول - نظام سكنات الجامعة الأردنية</title>
+    <!-- استدعاء بوتستراب لتسهيل التنسيق -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/login.css" />
+    <style>
+        .text-custom-blue {
+            color: #2666AE !important;
+        }
+    </style>
+</head>
+<body class="login-body">
+
+    <div class="login-container">
+        <!-- صندوق تسجيل الدخول الأبيض -->
+        <div class="login-card shadow-sm">
+
+            <!-- شعار الجامعة والترحيب -->
+            <div class="text-center mb-4">
+                <img src="/images/ju-logo.png" alt="شعار الجامعة الأردنية" class="ju-logo mb-3" />
+                <h3 class="fw-bold">مرحباً بك في نظام سكنات الجامعة الأردنية</h3>
+                <p class="text-custom-blue fw-semibold">يرجى إدخال بيانات الدخول الخاصة بك</p>
+            </div>
+
+            <!-- نموذج الدخول -->
+            <form asp-action="Login" method="post">
+
+                <!-- عرض رسالة خطأ في حال فشل تسجيل الدخول -->
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger text-center py-2 mb-3" role="alert">
+                        @ViewBag.Error
+                    </div>
+                }
+
+                <div class="mb-3">
+                    <label class="form-label float-end">اسم المستخدم</label>
+                    <input type="text" name="username" class="form-control custom-input" required placeholder="" />
+                </div>
+
+                <div class="mb-5">
+                    <label class="form-label float-end">كلمة المرور</label>
+                    <input type="password" name="password" class="form-control custom-input" required placeholder="" />
+                </div>
+
+                <div class="mb-4 text-start">
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-login text-white">تسجيل الدخول</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- الفوتر السفلي الأزرق الغامق -->
+        <footer class="login-footer text-white d-flex justify-content-between align-items-center px-4">
+            <div>
+                <a asp-controller="Home" asp-action="contact_us" class="text-white text-decoration-none">اتصل بنا</a>
+            </div>
+            <div>
+                <a asp-controller="Home" asp-action="privacy_policy" class="text-white text-decoration-none">سياسة الخصوصية</a>
+            </div>
+            <div>
+                <span>الجبيهة, عمان, الأردن</span> 📍
+            </div>
+        </footer>
+    </div>
+
+</body>
+</html>

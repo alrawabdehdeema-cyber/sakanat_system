@@ -1,0 +1,54 @@
+﻿@{
+    ViewData["Title"] = "الصفحة الرئيسية";
+    Layout = "_HeaderAndFooter";
+}
+
+<!-- المحتوى الخاص بصفحة الطالب فقط -->
+<div class="container my-5">
+
+    <!-- عرض رسائل الأخطاء أو التنبيهات القادمة من الكنترولر -->
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show text-center mb-4 shadow-sm" role="alert" dir="rtl">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <span>@TempData["ErrorMessage"]</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["InfoMessage"] != null)
+    {
+        <div class="alert alert-info alert-dismissible fade show text-center mb-4 shadow-sm" role="alert" dir="rtl">
+            <i class="bi bi-info-circle-fill me-2"></i>
+            <span>@TempData["InfoMessage"]</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="text-center">
+        <h2 class="fw-bold mb-2">نظام سكنات الجامعة الأردنية</h2>
+        <p class="text-custom-blue fw-semibold mb-5">يرجى اختيار نوع الطلب الخاص بك</p>
+    </div>
+
+    <div class="row justify-content-center gap-4">
+        <!-- خيار طلب جديد (تم توجيهه لصفحة الفورم مع تمرير isNew = true) -->
+        <div class="col-md-8">
+            <a asp-controller="Home" asp-action="housing_form" asp-route-isNew="true" class="text-decoration-none">
+                <div class="card request-card p-4 shadow-sm">
+                    <h4 class="fw-bold text-dark">طلب جديد</h4>
+                    <p class="text-muted mb-0">في حال الانتساب بالسكن للمرة الأولى</p>
+                </div>
+            </a>
+        </div>
+
+        <!-- خيار متابعة طلب سابق/تجديد (تم توجيه لصفحة الفورم مع تمرير isNew = false) -->
+        <div class="col-md-8">
+            <a asp-controller="Home" asp-action="housing_form" asp-route-isNew="false" class="text-decoration-none">
+                <div class="card request-card p-4 shadow-sm">
+                    <h4 class="fw-bold text-dark">متابعة طلب سابق</h4>
+                    <p class="text-muted mb-0">في حال تجديد طلب الانتساب بالسكن</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>

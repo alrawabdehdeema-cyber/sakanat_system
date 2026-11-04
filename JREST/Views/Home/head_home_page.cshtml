@@ -1,44 +1,75 @@
-﻿@{
-    ViewData["Title"] = "لوحة تحكم المشرف / رئيس الشعبة";
+﻿@model IEnumerable<JREST.Models.HousingApplication>
+@{
+    ViewData["Title"] = "لوحة تحكم رئيس الشعبة";
     Layout = "_HeaderAndFooter";
+
+    int pendingCount = ViewBag.PendingCount ?? 0;
+    int headApprovedCount = ViewBag.HeadApprovedCount ?? 0;
+    int headRejectedCount = ViewBag.HeadRejectedCount ?? 0;
+    string currentFilter = ViewBag.CurrentFilter ?? "قيد الانتظار";
+
+    // هل نحن في عرض الطلبات المعلقة/قيد الانتظار؟
+    bool isPendingView = (currentFilter == "قيد الانتظار");
 }
 
-<div class="container my-5" style="max-width: 1100px; direction: rtl; text-align: right;">
+<div class="container my-5" style="max-width: 1200px; direction: rtl; text-align: right;">
 
     <!-- عنوان الصفحة -->
-    <h3 class="fw-bold text-custom-blue mb-4">
-        نظام سكنات الجامعة الأردنية
-    </h3>
+    <div class="mb-4">
+        <h3 class="fw-bold text-custom-blue m-0">
+            نظام سكنات الجامعة الأردنية - لوحة رئيس الشعبة
+        </h3>
+    </div>
 
-    <!-- شريط الإحصائيات والبحث العلوي -->
+    <!-- شريط الإحصائيات التفاعلية والبحث العلوي -->
     <div class="row align-items-center mb-4 g-3">
 
-        <!-- بطاقات الإحصائيات -->
-        <div class="col-md-8 d-flex justify-content-start gap-3">
-            <div class="card border-0 shadow-sm rounded-pill px-4 py-2 bg-white d-flex flex-row align-items-center gap-3">
-                <i class="fas fa-users fs-4 text-secondary"></i>
-                <div class="text-secondary small">
-                    <span>عدد الطلاب الكلي</span><br>
-                    <span>في السكن</span>
-                </div>
-                <span class="fs-4 fw-bold text-custom-blue">0</span>
-            </div>
+        <!-- بطاقات الإحصائيات التفاعلية الخاصة برئيس الشعبة -->
+        <div class="col-md-8 d-flex justify-content-start gap-3 flex-wrap">
 
-            <div class="card border-0 shadow-sm rounded-pill px-4 py-2 bg-white d-flex flex-row align-items-center gap-3">
-                <i class="fas fa-user-plus fs-4 text-secondary"></i>
-                <div class="text-secondary small">
-                    <span>عدد الطلاب الجدد</span><br>
-                    <span>في السكن</span>
+            <!-- بطاقة الطلبات المعلقة (قيد الانتظار) -->
+            <a href="@Url.Action("head_home_page", "Home", new { status = "قيد الانتظار" })" class="text-decoration-none">
+                <div class="card border-0 shadow-sm rounded-pill px-4 py-2 bg-white d-flex flex-row align-items-center gap-3 filter-card @(currentFilter == "قيد الانتظار" ? "active-filter-pending" : "")">
+                    <i class="fas fa-clock fs-4 text-secondary"></i>
+                    <div class="text-secondary small">
+                        <span class="fw-semibold">الطلبات المعلقة</span><br>
+                        <span>قيد المراجعة</span>
+                    </div>
+                    <span class="fs-4 fw-bold text-custom-blue">@pendingCount</span>
                 </div>
-                <span class="fs-4 fw-bold text-custom-blue">0</span>
-            </div>
+            </a>
+
+            <!-- بطاقة الطلبات المقبولة (محولة للعميد) -->
+            <a href="@Url.Action("head_home_page", "Home", new { status = "مقبول مبدئياً" })" class="text-decoration-none">
+                <div class="card border-0 shadow-sm rounded-pill px-4 py-2 bg-white d-flex flex-row align-items-center gap-3 filter-card @(currentFilter == "مقبول مبدئياً" ? "active-filter-approved" : "")">
+                    <i class="fas fa-check-circle fs-4 text-success"></i>
+                    <div class="text-secondary small">
+                        <span class="fw-semibold">الطلبات المقبولة</span><br>
+                        <span>(محولة للعميد)</span>
+                    </div>
+                    <span class="fs-4 fw-bold text-success">@headApprovedCount</span>
+                </div>
+            </a>
+
+            <!-- بطاقة الطلبات المرفوضة من الشعبة -->
+            <a href="@Url.Action("head_home_page", "Home", new { status = "مرفوض" })" class="text-decoration-none">
+                <div class="card border-0 shadow-sm rounded-pill px-4 py-2 bg-white d-flex flex-row align-items-center gap-3 filter-card @(currentFilter == "مرفوض" ? "active-filter-rejected" : "")">
+                    <i class="fas fa-times-circle fs-4 text-danger"></i>
+                    <div class="text-secondary small">
+                        <span class="fw-semibold">الطلبات المرفوضة</span><br>
+                        <span>من قبلك</span>
+                    </div>
+                    <span class="fs-4 fw-bold text-danger">@headRejectedCount</span>
+                </div>
+            </a>
+
         </div>
 
-        <!-- خانة البحث -->
+        <!-- خانة البحث الفوري -->
         <div class="col-md-4">
             <div class="input-group">
-                <input type="text" class="form-control rounded-pill text-end px-3" placeholder="بحث عن طالبة..." aria-label="بحث">
-                <button class="btn btn-outline-secondary rounded-pill me-2 px-3" type="button">
+                <input type="text" id="searchInput" class="form-control rounded-pill text-end px-3" placeholder="بحث عن طالبة (الاسم أو الرقم)..." aria-label="بحث">
+                <button class="btn btn-outline-secondary rounded-pill me-2 px-3" type="button" id="searchBtn">
                     <i class="fas fa-search"></i>
                 </button>
             </div>
@@ -49,29 +80,91 @@
     <!-- جدول الطلبات -->
     <div class="card shadow-sm border-0 rounded-4 bg-white p-3">
         <div class="table-responsive">
-            <table class="table table-bordered text-center align-middle mb-0">
+            <table class="table table-bordered text-center align-middle mb-0" id="applicationsTable">
                 <thead class="table-light">
                     <tr>
                         <th class="py-3 text-custom-blue">الرقم الجامعي</th>
                         <th class="py-3 text-custom-blue">اسم الطالبة</th>
+                        <th class="py-3 text-custom-blue">تاريخ تقديم الطلب</th>
+                        <th class="py-3 text-custom-blue">الحالة الحالية</th>
                         <th class="py-3 text-custom-blue">معلومات الطالبة</th>
                         <th class="py-3 text-custom-blue">رؤية الطلب</th>
+                        <th class="py-3 text-custom-blue">التواصل مع الطالبة</th>
                         <th class="py-3 text-custom-blue">تقييم الطلب</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- سيتم تعبئة هذا الجزء لاحقاً من قاعدة البيانات عبر Model أو ViewBag -->
-                    <tr>
-                        <td colspan="5" class="text-center text-muted py-5">
-                            <i class="fas fa-folder-open fs-2 mb-2 d-block text-secondary"></i>
-                            لا توجد طلبات سكن جديدة قيد المراجعة حالياً.
-                        </td>
-                    </tr>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.UniversityId</td>
+                                <td>@item.FullName</td>
+                                <td>@item.SubmissionDate.ToString("yyyy-MM-dd")</td>
+                                <td>
+                                    @if (item.Status == "مقبول مبدئياً")
+                                    {
+                                        <span class="badge bg-info text-dark rounded-pill px-3 py-2">مقبول مبدئياً (محول للعميد)</span>
+                                    }
+                                    else if (item.Status == "مقبول")
+                                    {
+                                        <span class="badge bg-success rounded-pill px-3 py-2">مقبول نهائياً</span>
+                                    }
+                                    else if (item.Status == "مرفوض" || item.Status == "مرفوض من العميد")
+                                    {
+                                        <span class="badge bg-danger rounded-pill px-3 py-2">مرفوض</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning text-dark rounded-pill px-3 py-2">قيد الانتظار</span>
+                                    }
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("student_history", "Home", new { userId = item.UserId, name = item.FullName })" class="btn btn-sm btn-outline-primary fw-bold rounded-pill px-3">اضغط هنا</a>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("view_student_request", "Home", new { id = item.Id })" class="btn btn-sm btn-outline-secondary fw-bold rounded-pill px-3">اضغط هنا</a>
+                                </td>
+                                <td>
+                                    <a href="@Url.Action("contact_student", "Home", new { userId = item.UserId })" class="btn btn-sm btn-outline-success fw-bold rounded-pill px-3">اضغط هنا</a>
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        @if (item.Status == "قيد الانتظار")
+                                        {
+                                            <!-- زر القبول: يرسل لنفس الفوّرم الأصلي تماماً باستعمال SweetAlert2 -->
+                                            <form id="approveForm-@item.Id" asp-action="HeadApproveApplication" method="post" style="display:inline;">
+                                                <input type="hidden" name="id" value="@item.Id" />
+                                                <button type="button" class="btn btn-success btn-sm px-3 rounded-pill fw-semibold" onclick="confirmApproval(@item.Id)">قبول وتحويل للعميد</button>
+                                            </form>
+
+                                            <!-- زر الرفض: يوجه لنفس الرابط الأصلي صفحة rejection_reason باستعمال SweetAlert2 -->
+                                            <a href="javascript:void(0);" onclick="confirmRejection('@Url.Action("rejection_reason", "Home", new { id = item.Id })')" class="btn btn-danger btn-sm px-3 rounded-pill fw-semibold text-decoration-none">رفض</a>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted small">تم اتخاذ القرار</span>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr id="noDataRow">
+                            <td colspan="8" class="text-center text-muted py-5">
+                                <i class="fas fa-folder-open fs-2 mb-2 d-block text-secondary"></i>
+                                لا توجد طلبات سكن مطابقة للفلتر المحدد حالياً.
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
 
-        <!-- ترانزيت الصفحات المبسط -->
+        <!-- ترانزيت الصفحات -->
         <div class="d-flex justify-content-end mt-4">
             <nav aria-label="Page navigation">
                 <ul class="pagination mb-0">
@@ -85,6 +178,83 @@
     </div>
 </div>
 
+<!-- سكريبت SweetAlert2 والتفاعلات الأصلي 100% -->
+<script>
+    // 1. تنبيه القبول المرتب قبل إرسال الفوّرم الأصلي
+    function confirmApproval(id) {
+        Swal.fire({
+            title: 'هل أنت متأكد؟',
+            text: 'هل أنت متأكد من قبول الطلب وتحويله إلى العميد؟',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#198754',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'نعم، قم بالقبول',
+            cancelButtonText: 'إلغاء',
+            customClass: {
+                popup: 'rounded-4 shadow'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('approveForm-' + id).submit();
+            }
+        });
+    }
+
+    // 2. تنبيه الرفض المرتب قبل الانتقال لصفحة كتابة السبب الأصلية
+    function confirmRejection(targetUrl) {
+        Swal.fire({
+            title: 'هل أنت متأكد؟',
+            text: 'هل أنت متأكد من رفض الطلب والانتقال لتسجيل السبب؟',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'نعم، انتقل لتسجيل السبب',
+            cancelButtonText: 'إلغاء',
+            customClass: {
+                popup: 'rounded-4 shadow'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = targetUrl;
+            }
+        });
+    }
+
+    // 3. سكريبت البحث الفوري (Live Search)
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("searchInput");
+        const table = document.getElementById("applicationsTable");
+        if (searchInput && table) {
+            const tbody = table.getElementsByTagName("tbody")[0];
+            const rows = tbody.getElementsByTagName("tr");
+
+            searchInput.addEventListener("keyup", function () {
+                const filter = searchInput.value.toLowerCase().trim();
+
+                for (let i = 0; i < rows.length; i++) {
+                    if (rows[i].id === "noDataRow") continue;
+
+                    const universityIdCell = rows[i].getElementsByTagName("td")[0];
+                    const nameCell = rows[i].getElementsByTagName("td")[1];
+
+                    if (universityIdCell && nameCell) {
+                        const universityIdText = universityIdCell.textContent || universityIdCell.innerText;
+                        const nameText = nameCell.textContent || nameCell.innerText;
+
+                        if (universityIdText.toLowerCase().includes(filter) || nameText.toLowerCase().includes(filter)) {
+                            rows[i].style.display = "";
+                        } else {
+                            rows[i].style.display = "none";
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
+
 <style>
     .bg-custom-blue {
         background-color: #2666AE !important;
@@ -92,5 +262,35 @@
 
     .border-custom-blue {
         border-color: #2666AE !important;
+    }
+
+    .text-custom-blue {
+        color: #2666AE !important;
+    }
+
+    .filter-card {
+        transition: all 0.25s ease-in-out;
+        cursor: pointer;
+        border: 2px solid transparent !important;
+    }
+
+        .filter-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.12) !important;
+        }
+
+    .active-filter-pending {
+        border: 2px solid #2666AE !important;
+        background-color: #f0f7ff !important;
+    }
+
+    .active-filter-approved {
+        border: 2px solid #198754 !important;
+        background-color: #f0fff4 !important;
+    }
+
+    .active-filter-rejected {
+        border: 2px solid #dc3545 !important;
+        background-color: #fff5f5 !important;
     }
 </style>

@@ -1,0 +1,59 @@
+﻿@{
+    ViewData["Title"] = "اتصل بنا";
+    Layout = "_HeaderAndFooter";
+}
+
+<!-- تنسيقات CSS الخاصة بالصفحة -->
+<style>
+    .contact-card {
+        border: 1px solid #eaeaea;
+        transition: all 0.3s ease;
+    }
+
+        .contact-card:hover {
+            box-shadow: 0 .5rem 1rem rgba(0,0,0,.08) !important;
+            border-color: #d0d0d0;
+        }
+
+    .contact-number {
+        color: #1a6fc4;
+        transition: color 0.2s ease;
+    }
+
+        .contact-number:hover {
+            color: #0d47a1;
+            text-decoration: underline !important;
+        }
+</style>
+
+<div class="container my-5" dir="rtl">
+    <!-- عنوان الصفحة -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-8 col-lg-6 text-end">
+            <h2 class="fw-bold text-dark">نسعد بسماعك – تواصل معنا الآن</h2>
+        </div>
+    </div>
+
+    <!-- بطاقات أرقام التواصل -->
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <!-- سكن الأندلس -->
+            <div class="contact-card p-4 mb-3 rounded bg-white shadow-sm d-flex align-items-center justify-content-around">
+                <div class="d-flex align-items-center gap-3">
+                    <i class="fas fa-phone-alt fa-lg text-primary"></i>
+                    <span class="fs-5 fw-bold text-dark">سكن الأندلس:</span>
+                </div>
+                <a href="tel:0792001518" class="fs-4 fw-bold text-decoration-none contact-number" dir="ltr">0792001518</a>
+            </div>
+
+            <!-- سكن الزهراء -->
+            <div class="contact-card p-4 rounded bg-white shadow-sm d-flex align-items-center justify-content-around">
+                <div class="d-flex align-items-center gap-3">
+                    <i class="fas fa-phone-alt fa-lg text-primary"></i>
+                    <span class="fs-5 fw-bold text-dark">سكن الزهراء:</span>
+                </div>
+                <a href="tel:0792007159" class="fs-4 fw-bold text-decoration-none contact-number" dir="ltr">0792007159</a>
+            </div>
+        </div>
+    </div>
+</div>

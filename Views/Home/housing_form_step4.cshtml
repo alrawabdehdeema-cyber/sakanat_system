@@ -1,0 +1,125 @@
+﻿@model JREST.Models.HousingApplication
+
+@{
+    ViewData["Title"] = "طلب إلحاق الطالب بالسكن - الخطوة 4";
+    Layout = "_HeaderAndFooter";
+
+    bool isNew = ViewBag.IsNew ?? true;
+}
+
+<div class="container my-5" dir="rtl">
+
+    <!-- عنوان الصفحة -->
+    <h3 class="text-custom-blue fw-bold mb-4 text-end">طلب إلحاق الطالب بالسكن</h3>
+
+    <!-- شريط الخطوات (Stepper) -->
+    <div class="stepper-container mb-5">
+        <div class="d-flex align-items-center gap-2">
+            <!-- الخطوة 1 -->
+            <a href="@Url.Action("housing_form", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">1</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 2 -->
+            <a href="@Url.Action("housing_form_step2", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">2</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 3 -->
+            <a href="@Url.Action("housing_form_step3", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">3</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 4 (الحالية) -->
+            <a href="@Url.Action("housing_form_step4", "Home", new { isNew = isNew })" class="step-circle text-decoration-none active">4</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 5 -->
+            <a href="@Url.Action("housing_form_step5", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">5</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 6 -->
+            <a href="@Url.Action("housing_form_step6", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">6</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 7 -->
+            <a href="@Url.Action("housing_form_step7", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">7</a>
+            <div class="step-line"></div>
+
+            <!-- الخطوة 8 -->
+            <a href="@Url.Action("housing_form_step8", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">8</a>
+        </div>
+    </div>
+
+    <!-- نموذج إدخال بيانات الخطوة الرابعة -->
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-9">
+            <form id="step4Form" asp-action="SaveStep4" asp-controller="Home" method="post">
+                <input type="hidden" name="isNew" value="@isNew.ToString()" />
+
+                <!-- العنوان السكني الدائم لعائلة الطالبة -->
+                <div class="text-end mb-4">
+                    <h5 class="fw-bold text-dark">العنوان السكني الدائم لعائلة الطالبة</h5>
+                </div>
+
+                <!-- الصف الأول: المحافظة وطبيعة السكن (ممنوع الكتابة اليدوية - اختيار من القائمة فقط) -->
+                <div class="row mb-3">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block mb-1">المحافظة <span class="text-danger">*</span></label>
+                        <input type="text" name="governorate" class="form-control custom-input required-field" list="governorateOptions" placeholder="اختر  المحافظة" onkeydown="return false;" required />
+                        <datalist id="governorateOptions">
+                            <option value="عمان"></option>
+                            <option value="إربد"></option>
+                            <option value="الزرقاء"></option>
+                            <option value="السلط"></option>
+                            <option value="الكرك"></option>
+                            <option value="مادبا"></option>
+                            <option value="عجلون"></option>
+                            <option value="جرش"></option>
+                            <option value="المفرق"></option>
+                            <option value="معان"></option>
+                            <option value="العقبة"></option>
+                            <option value="الطفيلة"></option>
+                        </datalist>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block mb-1">طبيعة السكن <span class="text-danger">*</span></label>
+                        <input type="text" name="housingType" class="form-control custom-input required-field" list="housingTypeOptions" placeholder="اختر طبيعة السكن" onkeydown="return false;" required />
+                        <datalist id="housingTypeOptions">
+                            <option value="ملك"></option>
+                            <option value="مستأجر"></option>
+                        </datalist>
+                    </div>
+                </div>
+
+                <!-- الصف الثاني: المدينة ورقم المبنى -->
+                <div class="row mb-3">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block mb-1">المدينة <span class="text-danger">*</span></label>
+                        <input type="text" name="city" class="form-control custom-input required-field" placeholder="أدخل اسم المدينة" required />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block mb-1">رقم المبنى</label>
+                        <input type="text" name="buildingNumber" class="form-control custom-input" placeholder="رقم المبنى" />
+                    </div>
+                </div>
+
+                <!-- الصف الثالث: الشارع والحي -->
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block mb-1">الشارع</label>
+                        <input type="text" name="street" class="form-control custom-input" placeholder="اسم الشارع" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block mb-1">الحي</label>
+                        <input type="text" name="neighborhood" class="form-control custom-input" placeholder="اسم الحي" />
+                    </div>
+                </div>
+
+                <!-- أزرار السابق والتالي -->
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="@Url.Action("housing_form_step3", "Home", new { isNew = isNew })" class="btn btn-secondary px-4 fw-semibold shadow-sm text-decoration-none">السابق</a>
+                    <button type="submit" class="btn btn-next text-white px-4 fw-semibold shadow-sm">التالي</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

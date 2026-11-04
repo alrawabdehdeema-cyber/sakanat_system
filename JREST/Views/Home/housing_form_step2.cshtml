@@ -1,4 +1,6 @@
-﻿@{
+﻿@model JREST.Models.HousingApplication
+
+@{
     ViewData["Title"] = "طلب إلحاق الطالب بالسكن - الخطوة 2";
     Layout = "_HeaderAndFooter";
 
@@ -7,6 +9,13 @@
 }
 
 <div class="container my-5" dir="rtl">
+
+    <!-- شريط التنبيه الأنيق (مخفي افتراضياً) -->
+    <div id="validationAlert" class="alert alert-danger alert-dismissible fade show d-none rounded-3 shadow-sm mb-4" role="alert">
+        <i class="fas fa-exclamation-circle ms-2"></i>
+        <span id="alertMessage">الرجاء تعبئة جميع الحقول الإجبارية قبل الانتقال للخطوة التالية.</span>
+        <button type="button" class="btn-close ms-auto me-0" onclick="hideValidationAlert()"></button>
+    </div>
 
     <!-- عنوان الصفحة -->
     <h3 class="text-custom-blue fw-bold mb-4 text-end">
@@ -73,36 +82,36 @@
                 </div>
 
                 <div class="row mb-3">
-                    <!-- الحالة الاجتماعية -->
+                    <!-- الحالة الاجتماعية (بدون سهم - باستخدام datalist) -->
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-semibold text-end d-block">الحالة الاجتماعية <span class="text-danger">*</span></label>
-                        <select name="maritalStatus" id="field4" class="form-select custom-input required-field" required>
-                            <option selected disabled value=""></option>
-                            <option value="أعزب / عزباء">أعزب / عزباء</option>
-                            <option value="متزوج / متزوجة">متزوج / متزوجة</option>
-                        </select>
+                        <input type="text" name="maritalStatus" id="field4" class="form-control custom-input required-field" list="maritalStatusOptions" placeholder="اختر أو اكتب الحالة الاجتماعية" required />
+                        <datalist id="maritalStatusOptions">
+                            <option value="أعزب / عزباء"></option>
+                            <option value="متزوج / متزوجة"></option>
+                        </datalist>
                     </div>
-                    <!-- الديانة -->
+                    <!-- الديانة (بدون سهم - باستخدام datalist) -->
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-semibold text-end d-block">الديانة <span class="text-danger">*</span></label>
-                        <select name="religion" id="field5" class="form-select custom-input required-field" required>
-                            <option selected disabled value=""></option>
-                            <option value="مسلم">مسلم</option>
-                            <option value="مسيحي">مسيحي</option>
-                        </select>
+                        <input type="text" name="religion" id="field5" class="form-control custom-input required-field" list="religionOptions" placeholder="اختر أو اكتب الديانة" required />
+                        <datalist id="religionOptions">
+                            <option value="مسلم"></option>
+                            <option value="مسيحي"></option>
+                        </datalist>
                     </div>
                 </div>
 
                 <div class="row mb-4">
-                    <!-- تاريخ الميلاد -->
+                    <!-- تاريخ الميلاد (حقل تاريخ طبيعي بدون سهم) -->
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-semibold text-end d-block">تاريخ الميلاد <span class="text-danger">*</span></label>
                         <input type="date" name="birthDate" id="field6" class="form-control custom-input required-field" required />
                     </div>
-                    <!-- الجنسية -->
+                    <!-- الجنسية (بدون سهم - باستخدام datalist) -->
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-semibold text-end d-block">الجنسية <span class="text-danger">*</span></label>
-                        <input type="text" name="nationality" id="field7" class="form-control custom-input required-field" list="nationalityOptions" required />
+                        <input type="text" name="nationality" id="field7" class="form-control custom-input required-field" list="nationalityOptions" placeholder="اختر أو اكتب الجنسية" required />
                         <datalist id="nationalityOptions">
                             <option value="أردني / أردنية"></option>
                         </datalist>
@@ -120,13 +129,25 @@
 
 </div>
 
-<!-- سكريبت التحقق وإظهار رسالة التنبيه -->
+<!-- سكريبت التحقق وإظهار شريط التنبيه الأنيق -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const step2Form = document.getElementById("step2Form");
         const requiredFields = document.querySelectorAll(".required-field");
         const studentPhone = document.getElementById("studentPhone");
         const parentPhone = document.getElementById("parentPhone");
+        const alertBox = document.getElementById("validationAlert");
+        const alertMessage = document.getElementById("alertMessage");
+
+        function showAlert(msg) {
+            alertMessage.textContent = msg;
+            alertBox.classList.remove("d-none");
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.hideValidationAlert = function() {
+            alertBox.classList.add("d-none");
+        }
 
         function isValidPhone(phone) {
             const phoneRegex = /^07\d{8}$/;
@@ -143,20 +164,20 @@
             });
 
             if (!allFilled) {
-                alert("الرجاء تعبئة جميع الحقول الإجبارية قبل الانتقال للخطوة التالية.");
+                showAlert("الرجاء تعبئة جميع الحقول الإجبارية قبل الانتقال للخطوة التالية.");
                 e.preventDefault();
                 return;
             }
 
             if (!isValidPhone(studentPhone.value.trim())) {
-                alert("الرجاء إدخال رقم موبايل صحيح للطالبة (يجب أن يبدأ بـ 07 ويتكون من 10 أرقام).");
+                showAlert("الرجاء إدخال رقم موبايل صحيح للطالبة (يجب أن يبدأ بـ 07 ويتكون من 10 أرقام).");
                 studentPhone.focus();
                 e.preventDefault();
                 return;
             }
 
             if (!isValidPhone(parentPhone.value.trim())) {
-                alert("الرجاء إدخال رقم موبايل صحيح لولي الأمر (يجب أن يبدأ بـ 07 ويتكون من 10 أرقام).");
+                showAlert("الرجاء إدخال رقم موبايل صحيح لولي الأمر (يجب أن يبدأ بـ 07 ويتكون من 10 أرقام).");
                 parentPhone.focus();
                 e.preventDefault();
                 return;

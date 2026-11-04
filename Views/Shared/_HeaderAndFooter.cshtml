@@ -1,0 +1,189 @@
+﻿@{
+    // قراءة دور المستخدم المخزن في الجلسة لتوجيه زر الصفحة الرئيسية والإشعارات للصحيح
+    string userRole = Context.Session.GetString("UserRole");
+    string homeAction = "student_home_page"; // القيمة الافتراضية
+    string notificationsAction = "student_notifications"; // القيمة الافتراضية للإشعارات
+
+    if (userRole == "dean")
+    {
+        homeAction = "dean_home_page";
+        notificationsAction = "dean_notifications"; // توجيه العميد لإشعاراته الخاصة
+    }
+    else if (userRole == "head")
+    {
+        homeAction = "head_home_page";
+        notificationsAction = "head_notifications"; // توجيه رئيس الشعبة لإشعاراته الخاصة
+    }
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - نظام سكنات الجامعة الأردنية</title>
+
+    <!-- رابط مكتبة Bootstrap 5 للتنسيق -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- رابط مكتبة الأيقونات FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- SweetAlert2 CSS لتنبيهات التأكيد الحديثة -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <!-- ربط ملف الـ CSS الخاص بنماذج السكن (housing_form.css) -->
+    <link rel="stylesheet" href="~/css/housing_form.css" />
+
+    <!-- تنسيقات الهيدر والفوتر العامة والثابتة لكل النظام -->
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            direction: rtl;
+            text-align: right;
+            background-color: #f8f9fa;
+        }
+
+        .page-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* تنسيق الهيدر العلوي الموحد */
+        .custom-navbar {
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .nav-logo {
+            height: 45px;
+            object-fit: contain;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        .text-custom-blue {
+            color: #2666AE !important;
+        }
+
+        /* تنسيق لتوسيط الروابط تماماً في المنتصف */
+        .nav-centered {
+            margin-right: auto !important;
+            margin-left: auto !important;
+        }
+
+        /* تنسيق الفوتر الكحلي الموحد */
+        .custom-footer {
+            background-color: #0b2545 !important;
+            color: #ffffff !important;
+            padding: 15px 0;
+            width: 100%;
+            margin-top: auto;
+        }
+
+        .footer-link {
+            color: #ffffff;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+            .footer-link:hover {
+                color: #a0c4ff;
+                text-decoration: underline;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="page-wrapper">
+        <!-- 1. الهيدر العلوي المشترك لكل الصفحات -->
+        <nav class="navbar navbar-expand-lg custom-navbar px-4">
+            <div class="container-fluid d-flex justify-content-between align-items-center">
+
+                <!-- شعار الجامعة (في أقصى اليمين) -->
+                <a class="navbar-brand m-0" href="#">
+                    <img src="~/images/ju-logo.png" alt="شعار الجامعة الأردنية" class="nav-logo" />
+                </a>
+
+                <!-- أزرار التنقل (متوسطة المكان تماماً وبيناتهم مسافات) -->
+                <div class="navbar-collapse show" id="navbarNav">
+                    <ul class="navbar-nav gap-4 mb-2 mb-lg-0 nav-centered">
+                        <li class="nav-item">
+                            <!-- الصفحة الرئيسية الديناميكية حسب نوع المستخدم -->
+                            <a class="nav-link active" asp-controller="Home" asp-action="@homeAction">الصفحة الرئيسية</a>
+                        </li>
+                        <li class="nav-item">
+                            <!-- رابط صفحة الإشعارات الديناميكي حسب نوع المستخدم -->
+                            <a class="nav-link" asp-controller="Home" asp-action="@notificationsAction">الإشعارات</a>
+                        </li>
+                        <li class="nav-item">
+                            <!-- رابط صفحة الأسعار -->
+                            <a class="nav-link" asp-controller="Home" asp-action="prices">الأسعار</a>
+                        </li>
+
+                        <!-- رابط التواصل مع العميد يظهر فقط لرئيس الشعبة (head) -->
+                        @if (userRole == "head")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="contact_dean">التواصل مع العميد</a>
+                            </li>
+                        }
+
+                        <li class="nav-item">
+                            <!-- تسجيل الخروج -->
+                            <a class="nav-link text-custom-blue" asp-controller="Home" asp-action="Login">تسجيل الخروج</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- مساحة فارغة بسيطة على اليسار لتوازن التصميم -->
+                <div style="width: 45px;"></div>
+
+            </div>
+        </nav>
+
+        <!-- 2. محتوى أي صفحة سيتم حقنه هنا تلقائياً -->
+        <main>
+            @RenderBody()
+        </main>
+
+        <!-- 3. الفوتر الكحلي المشترك لكل الصفحات -->
+        <footer class="custom-footer text-white py-3 mt-auto">
+            <div class="container d-flex justify-content-between align-items-center">
+                <a asp-controller="Home" asp-action="contact_us" class="footer-link">اتصل بنا</a>
+
+                <a asp-controller="Home" asp-action="privacy_policy" class="footer-link">سياسة الخصوصية</a>
+
+                <span><i class="bi bi-geo-alt-fill"></i> الجبيهة، عمان، الأردن</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- SweetAlert2 JS لدعم رسائل التأكيد التفاعلية في جميع الصفحات -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- سكربت تعريب رسائل الحقول الإجبارية (required) للمتصفح -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const inputs = document.querySelectorAll("input, select, textarea");
+
+            inputs.forEach(function (input) {
+                input.addEventListener("invalid", function () {
+                    if (input.validity.valueMissing) {
+                        input.setCustomValidity("يرجى تعبئة هذا الحقل");
+                    }
+                });
+
+                input.addEventListener("input", function () {
+                    input.setCustomValidity("");
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

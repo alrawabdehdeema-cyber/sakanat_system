@@ -1,6 +1,10 @@
-﻿@{
+﻿@model IEnumerable<JREST.Models.Notification>
+@{
     ViewData["Title"] = "إشعارات العميد";
     Layout = "_HeaderAndFooter";
+
+    // متغير تبديل الترقيم التسلسلي لتبدأ من 1 دائماً
+    int serialNumber = 1;
 }
 
 <div class="container my-5" style="max-width: 950px; direction: rtl; text-align: right;">
@@ -19,16 +23,32 @@
                 <thead class="table-light">
                     <tr>
                         <th class="py-3 text-custom-blue" style="width: 15%;">رقم الإشعار</th>
-                        <th class="py-3 text-custom-blue" style="width: 45%;">الوصف</th>
-                        <th class="py-3 text-custom-blue" style="width: 20%;">الوقت</th>
-                        <th class="py-3 text-custom-blue" style="width: 20%;">الإجراء</th>
+                        <th class="py-3 text-custom-blue" style="width: 50%;">الوصف </th>
+                        <th class="py-3 text-custom-blue" style="width: 35%;">الوقت </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- سيتم جلب البيانات لاحقاً من قاعدة البيانات الحقيقية -->
-                    <tr>
-                        <td colspan="4" class="text-muted py-4">لا توجد إشعارات جديدة حالياً.</td>
-                    </tr>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <!-- الترقيم التسلسلي المباشر (1، 2، 3...) حسب الرسائل المجلوبة -->
+                                <td class="fw-bold text-custom-blue">@(serialNumber++)</td>
+                                <td class="text-start px-3 fw-semibold text-dark">@item.Message</td>
+                                <td>@item.CreatedAt.ToString("yyyy-MM-dd hh:mm tt")</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3" class="text-muted py-4">
+                                <i class="fas fa-bell-slash fs-3 mb-2 d-block text-secondary"></i>
+                                لا توجد إشعارات جديدة حالياً.
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
@@ -37,9 +57,9 @@
         <div class="d-flex justify-content-end mt-4">
             <nav aria-label="Page navigation">
                 <ul class="pagination mb-0">
-                    <li class="page-item"><a class="page-link text-secondary" href="#">السابق</a></li>
+                    <li class="page-item disabled"><a class="page-link text-secondary" href="#">السابق</a></li>
                     <li class="page-item active"><a class="page-link bg-custom-blue border-custom-blue text-white" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link text-secondary" href="#">التالي</a></li>
+                    <li class="page-item disabled"><a class="page-link text-secondary" href="#">التالي</a></li>
                 </ul>
             </nav>
         </div>
@@ -54,5 +74,9 @@
 
     .border-custom-blue {
         border-color: #2666AE !important;
+    }
+
+    .text-custom-blue {
+        color: #2666AE !important;
     }
 </style>

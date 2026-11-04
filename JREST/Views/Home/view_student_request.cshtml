@@ -1,16 +1,27 @@
-﻿@{
-    ViewData["Title"] = "عرض طلب السكن للطالب";
+﻿@model JREST.Models.HousingApplication
+@{
+    ViewData["Title"] = "عرض طلب السكن للطالبة";
     Layout = "_HeaderAndFooter";
+
+    string userRole = Context.Session.GetString("UserRole") ?? "";
+    string backAction = "Index";
+    if (userRole.Equals("dean", StringComparison.OrdinalIgnoreCase))
+    {
+        backAction = "dean_home_page";
+    }
+    else if (userRole.Equals("head", StringComparison.OrdinalIgnoreCase))
+    {
+        backAction = "head_home_page";
+    }
 }
 
 <div class="container my-5" style="max-width: 950px; direction: rtl; text-align: right;">
 
-    <!-- عنوان الصفحة -->
+    <!-- عنوان الصفحة فقط بدون زر علوي -->
     <div class="mb-4 text-center">
         <h3 class="text-custom-blue fw-bold">
-            <i class="fas fa-file-alt ms-2"></i> تفاصيل طلب السكن الخاص بالطالب
+            <i class="fas fa-file-alt ms-2"></i> تفاصيل طلب السكن الخاص بالطالبة: @Model.FullName
         </h3>
-        <p class="text-muted">استعراض كافة البيانات المدخلة في طلب السكن</p>
     </div>
 
     <!-- 1. المعلومات الأكاديمية والشخصية الأساسية -->
@@ -19,87 +30,91 @@
         <div class="row g-3">
             <div class="col-md-4">
                 <label class="text-muted small">الرقم الجامعي:</label>
-                <p class="fw-semibold mb-0">2023123456</p>
+                <p class="fw-semibold mb-0">@Model.UniversityId</p>
             </div>
             <div class="col-md-8">
-                <label class="text-muted small">الاسم من اربعة مقاطع:</label>
-                <p class="fw-semibold mb-0">ساره مهند أحمد محمد</p>
+                <label class="text-muted small">الاسم الكامل:</label>
+                <p class="fw-semibold mb-0">@Model.FullName</p>
             </div>
             <div class="col-md-4">
                 <label class="text-muted small">التخصص الجامعي:</label>
-                <p class="fw-semibold mb-0">هندسة البرمجيات</p>
+                <p class="fw-semibold mb-0">@Model.Major</p>
             </div>
             <div class="col-md-4">
                 <label class="text-muted small">المعدل التراكمي:</label>
-                <p class="fw-semibold mb-0">3.65</p>
+                <p class="fw-semibold mb-0">@Model.Gpa</p>
             </div>
             <div class="col-md-4">
                 <label class="text-muted small">معدل الثانوية العامة:</label>
-                <p class="fw-semibold mb-0">92.4</p>
+                <p class="fw-semibold mb-0">@Model.TawjihiGpa</p>
             </div>
             <div class="col-md-4">
-                <label class="text-muted small">تاريخ الالتحاق اول مره:</label>
-                <p class="fw-semibold mb-0">2023/09/15</p>
+                <label class="text-muted small">تاريخ الالتحاق أول مرة:</label>
+                <p class="fw-semibold mb-0">@(Model.EnrollmentDate.HasValue ? Model.EnrollmentDate.Value.ToString("yyyy/MM/dd") : "غير محدد")</p>
             </div>
             <div class="col-md-4">
                 <label class="text-muted small">رقم موبايل الطالبة:</label>
-                <p class="fw-semibold mb-0">0791234567</p>
+                <p class="fw-semibold mb-0">@Model.StudentPhone</p>
             </div>
             <div class="col-md-4">
-                <label class="text-muted small">رقم موبايل ولي الامر:</label>
-                <p class="fw-semibold mb-0">0789876543</p>
+                <label class="text-muted small">رقم موبايل ولي الأمر:</label>
+                <p class="fw-semibold mb-0">@Model.ParentPhone</p>
             </div>
             <div class="col-md-4">
                 <label class="text-muted small">رقم جواز السفر:</label>
-                <p class="fw-semibold mb-0">A1234567</p>
+                <p class="fw-semibold mb-0">@(string.IsNullOrEmpty(Model.PassportNumber) ? "لا يوجد" : Model.PassportNumber)</p>
             </div>
             <div class="col-md-3">
                 <label class="text-muted small">الحالة الاجتماعية:</label>
-                <p class="fw-semibold mb-0">عزباء</p>
+                <p class="fw-semibold mb-0">@Model.MaritalStatus</p>
             </div>
             <div class="col-md-3">
                 <label class="text-muted small">الديانة:</label>
-                <p class="fw-semibold mb-0">مسلمة</p>
+                <p class="fw-semibold mb-0">@Model.Religion</p>
             </div>
             <div class="col-md-3">
                 <label class="text-muted small">الجنسية:</label>
-                <p class="fw-semibold mb-0">أردنية</p>
+                <p class="fw-semibold mb-0">@Model.Nationality</p>
             </div>
             <div class="col-md-3">
                 <label class="text-muted small">تاريخ الميلاد:</label>
-                <p class="fw-semibold mb-0">2005/05/10</p>
+                <p class="fw-semibold mb-0">@(Model.BirthDate.HasValue ? Model.BirthDate.Value.ToString("yyyy/MM/dd") : "غير محدد")</p>
             </div>
             <div class="col-md-4">
                 <label class="text-muted small">العام الدراسي:</label>
-                <p class="fw-semibold mb-0">2025/2026</p>
+                <p class="fw-semibold mb-0">@Model.AcademicYear</p>
+            </div>
+            <div class="col-md-4">
+                <label class="text-muted small">الفصل الدراسي:</label>
+                <p class="fw-semibold mb-0">@Model.Semester</p>
             </div>
             <div class="col-md-4">
                 <label class="text-muted small">المستوى الدراسي:</label>
-                <p class="fw-semibold mb-0">السنة الثالثة</p>
+                <p class="fw-semibold mb-0">@Model.AcademicLevel</p>
             </div>
             <div class="col-md-4">
                 <label class="text-muted small">نوع الدراسة:</label>
-                <p class="fw-semibold mb-0">انتظام</p>
+                <p class="fw-semibold mb-0">@Model.StudyType</p>
             </div>
             <div class="col-md-4">
                 <label class="text-muted small">اسم السكن:</label>
-                <p class="fw-semibold mb-0">سكن طالبات الجامعة</p>
+                <p class="fw-semibold mb-0">@Model.HousingName</p>
             </div>
             <div class="col-md-4">
                 <label class="text-muted small">الكلية:</label>
-                <p class="fw-semibold mb-0">تكنولوجيا المعلومات</p>
+                <p class="fw-semibold mb-0">@Model.College</p>
             </div>
             <div class="col-md-4">
                 <label class="text-muted small">العقوبات:</label>
-                <p class="fw-semibold mb-0 text-success">لا يوجد</p>
+                <p class="fw-semibold mb-0">@Model.Penalties</p>
             </div>
             <div class="col-md-6">
-                <label class="text-muted small">ولي أمر الطالبة (أتحمل المسؤولية القانونية أمام ادارة):</label>
-                <p class="fw-semibold mb-0">مهند أحمد محمد</p>
+                <label class="text-muted small">تعهد الطالبة (الاسم):</label>
+                <p class="fw-semibold mb-0">@Model.PledgeStudentName</p>
             </div>
             <div class="col-md-6">
-                <label class="text-muted small">الجامعة في حال اي نقص أنا:</label>
-                <p class="fw-semibold mb-0">مهند أحمد محمد</p>
+                <label class="text-muted small">تعهد ولي الأمر (الاسم):</label>
+                <p class="fw-semibold mb-0">@Model.PledgeParentName</p>
             </div>
         </div>
     </div>
@@ -108,72 +123,68 @@
     <div class="card shadow-sm border-0 rounded-4 mb-4 p-4 bg-white">
         <h5 class="text-custom-blue fw-bold mb-3 border-bottom pb-2">العنوان السكني الدائم لعائلة الطالبة</h5>
         <div class="row g-3">
-            <div class="col-md-12">
-                <label class="text-muted small">العنوان السكني الدائم لعائلة الطالبة:</label>
-                <p class="fw-semibold mb-0">إربد - صما - الشارع الرئيسي</p>
-            </div>
             <div class="col-md-4">
                 <label class="text-muted small">المحافظة:</label>
-                <p class="fw-semibold mb-0">إربد</p>
+                <p class="fw-semibold mb-0">@Model.Governorate</p>
             </div>
             <div class="col-md-4">
                 <label class="text-muted small">طبيعة السكن:</label>
-                <p class="fw-semibold mb-0">ملك</p>
+                <p class="fw-semibold mb-0">@Model.HousingType</p>
             </div>
             <div class="col-md-4">
                 <label class="text-muted small">المدينة:</label>
-                <p class="fw-semibold mb-0">إربد</p>
+                <p class="fw-semibold mb-0">@Model.City</p>
             </div>
             <div class="col-md-4">
                 <label class="text-muted small">رقم المبنى:</label>
-                <p class="fw-semibold mb-0">12</p>
+                <p class="fw-semibold mb-0">@Model.BuildingNumber</p>
             </div>
             <div class="col-md-4">
                 <label class="text-muted small">الشارع:</label>
-                <p class="fw-semibold mb-0">شارع الملك حسين</p>
+                <p class="fw-semibold mb-0">@Model.Street</p>
             </div>
             <div class="col-md-4">
                 <label class="text-muted small">الحي:</label>
-                <p class="fw-semibold mb-0">حي النزهة</p>
+                <p class="fw-semibold mb-0">@Model.Neighborhood</p>
             </div>
         </div>
     </div>
 
-    <!-- 3. المعلومات الصحية وبيانات التواصل في حالة الطوارئ -->
+    <!-- 3. المعلومات الصحية والتأمين الصحي -->
     <div class="card shadow-sm border-0 rounded-4 mb-4 p-4 bg-white">
-        <h5 class="text-custom-blue fw-bold mb-3 border-bottom pb-2">المعلومات الصحية تفاصيل المعلومات الصحية وبيانات التواصل والتأمين الصحي في حالة الطوارئ</h5>
+        <h5 class="text-custom-blue fw-bold mb-3 border-bottom pb-2">المعلومات الصحية والتأمين الصحي</h5>
         <div class="row g-3">
-            <div class="col-md-4">
-                <label class="text-muted small">اسم للتواصل معه في حالة الطوارئ:</label>
-                <p class="fw-semibold mb-0">أحمد محمد</p>
-            </div>
-            <div class="col-md-4">
-                <label class="text-muted small">رقم هاتفه:</label>
-                <p class="fw-semibold mb-0">0771122334</p>
-            </div>
-            <div class="col-md-4">
-                <label class="text-muted small">نوع العلاقة:</label>
-                <p class="fw-semibold mb-0">عم</p>
+            <div class="col-md-6">
+                <label class="text-muted small">التأمين الصحي:</label>
+                <p class="fw-semibold mb-0">@Model.HealthInsurance</p>
             </div>
             <div class="col-md-6">
-                <label class="text-muted small">هل لديك تأمين صحي؟</label>
-                <p class="fw-semibold mb-0">نعم</p>
-            </div>
-            <div class="col-md-6">
-                <label class="text-muted small">هل تحتاج الى اي نوع من الرعاية الصحية وهل لديك امراض؟</label>
-                <p class="fw-semibold mb-0">لا أحتاج الى رعاية صحية</p>
+                <label class="text-muted small">الرعاية الصحية المطلوبة:</label>
+                <p class="fw-semibold mb-0">@Model.MedicalCareNeeded</p>
             </div>
             <div class="col-md-12">
                 <label class="text-muted small">الحالات الصحية التفصيلية:</label>
                 <ul class="mb-0 ps-3">
-                    <li>اعاني من حساسية وتفصيلها: لا يوجد</li>
-                    <li>اعاني من اعاقة جسدية وتفصيلها: لا يوجد</li>
-                    <li>أحتاج الى دواء محدد وتفصيله: لا يوجد</li>
+                    <li>حساسية: @(Model.HasAllergy ? Model.AllergyDetails : "لا يوجد")</li>
+                    <li>إعاقة جسدية: @(Model.HasDisability ? Model.DisabilityDetails : "لا يوجد")</li>
+                    <li>دواء محدد: @(Model.NeedsMedicine ? Model.MedicineDetails : "لا يوجد")</li>
                 </ul>
             </div>
             <div class="col-md-12 mt-3">
-                <label class="text-muted small">الأمراض التي تم اختيارها (إن وجدت):</label>
-                <p class="fw-semibold mb-0 text-success">لا توجد أمراض مزمنة محددة</p>
+                <label class="text-muted small">الأمراض المزمنة المحددة:</label>
+                <p class="fw-semibold mb-0">
+                    @{
+                        var diseases = new List<string>();
+                        if (Model.HasHypertension) diseases.Add("ضغط الدم");
+                        if (Model.HasPsychologicalDisorder) diseases.Add("اضطراب نفسي");
+                        if (Model.HasHeartDisease) diseases.Add("أمراض القلب");
+                        if (Model.HasEpilepsy) diseases.Add("الصرع");
+                        if (Model.HasDiabetes) diseases.Add("السكري");
+                        if (Model.HasAsthma) diseases.Add("الربو");
+                        if (Model.HasCancer) diseases.Add("السرطان");
+                    }
+                    @(diseases.Any() ? string.Join("، ", diseases) : "لا توجد أمراض مزمنة محددة")
+                </p>
             </div>
         </div>
     </div>
@@ -184,49 +195,156 @@
         <div class="row g-3">
             <div class="col-md-12">
                 <ul class="list-unstyled mb-0">
-                    <li><i class="fas fa-check text-success ms-2"></i> السماح للطالبة بمغادرة السكن لقضاء عطلة نهاية الاسبوع والأعياد الرسمية بمفردها وعند الأشخاص المذكورين اعلاه فقط</li>
-                    <li><i class="fas fa-check text-success ms-2"></i> السماح للطالبة بالمشاركة بالرحلات الداخلية لمدة يوم</li>
-                    <li><i class="fas fa-times text-danger ms-2"></i> السماح للطالبة بالمشاركة بالرحلات الداخلية لأكثر من يوم</li>
-                    <li><i class="fas fa-times text-danger ms-2"></i> السماح للطالبة بالسفر خارج البلاد بمفردها (للاشخاص القاطنين خارج الأردن)</li>
+                    <li>
+                        <i class="fas @(Model.AllowWeekendLeave ? "fa-check text-success" : "fa-times text-danger") ms-2"></i>
+                        السماح بمغادرة السكن لقضاء عطلة نهاية الأسبوع والأعياد الرسمية
+                    </li>
+                    <li>
+                        <i class="fas @(Model.AllowDayTrips ? "fa-check text-success" : "fa-times text-danger") ms-2"></i>
+                        السماح بالمشاركة بالرحلات الداخلية لمدة يوم
+                    </li>
+                    <li>
+                        <i class="fas @(Model.AllowMultiDayTrips ? "fa-check text-success" : "fa-times text-danger") ms-2"></i>
+                        السماح بالمشاركة بالرحلات الداخلية لأكثر من يوم
+                    </li>
+                    <li>
+                        <i class="fas @(Model.AllowTravelAbroad ? "fa-check text-success" : "fa-times text-danger") ms-2"></i>
+                        السماح بالسفر خارج البلاد
+                    </li>
                 </ul>
             </div>
         </div>
     </div>
 
-    <!-- 5. الوثائق والمرفقات -->
+    <!-- 5. الوثائق والمرفقات الحقيقية من المجلد -->
     <div class="card shadow-sm border-0 rounded-4 mb-4 p-4 bg-white">
-        <h5 class="text-custom-blue fw-bold mb-3 border-bottom pb-2">يرجى تحميل الوثائق التالية</h5>
+        <h5 class="text-custom-blue fw-bold mb-3 border-bottom pb-2">الوثائق والمرفقات</h5>
         <div class="row g-3">
             <div class="col-md-6">
-                <label class="text-muted small">صورة واضحة ملونة عن شهادة خلو الأمراض:</label>
-                <p class="fw-semibold mb-0"><span class="badge bg-secondary">Medical_Report.pdf</span></p>
+                <label class="text-muted small">شهادة خلو الأمراض:</label>
+                <p class="fw-semibold mb-0">
+                    @if (!string.IsNullOrEmpty(Model.HealthCertificatePath))
+                    {
+                        <a href="@Model.HealthCertificatePath" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill"><i class="fas fa-file-download ms-1"></i> عرض/تحميل الملف</a>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">لم يتم الإرفاق</span>
+                    }
+                </p>
             </div>
             <div class="col-md-6">
-                <label class="text-muted small">صورة واضحة عن دفتر العائلة:</label>
-                <p class="fw-semibold mb-0"><span class="badge bg-secondary">Family_Book.pdf</span></p>
+                <label class="text-muted small">دفتر العائلة:</label>
+                <p class="fw-semibold mb-0">
+                    @if (!string.IsNullOrEmpty(Model.FamilyBookPath))
+                    {
+                        <a href="@Model.FamilyBookPath" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill"><i class="fas fa-file-download ms-1"></i> عرض/تحميل الملف</a>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">لم يتم الإرفاق</span>
+                    }
+                </p>
             </div>
             <div class="col-md-6">
-                <label class="text-muted small">صورة واضحة عن كتاب التوكيل\الكفالة الرسمية في حال تغيير الوكيل فقط:</label>
-                <p class="fw-semibold mb-0"><span class="badge bg-secondary">غير مطلوب / لم يتم الإرفاق</span></p>
+                <label class="text-muted small">كتاب التوكيل / الكفالة:</label>
+                <p class="fw-semibold mb-0">
+                    @if (!string.IsNullOrEmpty(Model.PowerOfAttorneyPath))
+                    {
+                        <a href="@Model.PowerOfAttorneyPath" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill"><i class="fas fa-file-download ms-1"></i> عرض/تحميل الملف</a>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">غير مطلوب / لم يتم الإرفاق</span>
+                    }
+                </p>
             </div>
             <div class="col-md-6">
-                <label class="text-muted small">صورة واضحة ملونة عن هوية الأحوال المدنية للوكيل أو الصفحة الأولى لجواز السفر:</label>
-                <p class="fw-semibold mb-0"><span class="badge bg-secondary">Agent_ID.pdf</span></p>
+                <label class="text-muted small">هوية ولي الأمر/الوكيل:</label>
+                <p class="fw-semibold mb-0">
+                    @if (!string.IsNullOrEmpty(Model.GuardianIdPath))
+                    {
+                        <a href="@Model.GuardianIdPath" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill"><i class="fas fa-file-download ms-1"></i> عرض/تحميل الملف</a>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary">لم يتم الإرفاق</span>
+                    }
+                </p>
             </div>
         </div>
     </div>
 
-    <!-- أزرار اتخاذ القرار (قبول / رفض) -->
+    <!-- أزرار اتخاذ القرار وزر العودة مجمعة معاً في الأسفل بشكل أنيق -->
     <div class="d-flex justify-content-end gap-3 mt-4 mb-5">
-        <a asp-controller="Home" asp-action="confirm_acceptance" class="btn btn-success px-4 py-2">
-            <i class="fas fa-check ms-1"></i> قبول الطلب
+        <!-- زر العودة للوحة التحكم -->
+        <a href="@Url.Action(backAction, "Home")" class="btn btn-outline-secondary px-4 py-2 rounded-pill fw-bold">
+            الصفحة الرئيسية
         </a>
-        <a asp-controller="Home" asp-action="confirm_rejection" class="btn btn-danger px-4 py-2">
-            <i class="fas fa-times ms-1"></i> رفض الطلب
-        </a>
+
+        @if (Model.Status == "قيد الانتظار" || Model.Status == "مقبول مبدئياً")
+        {
+            <!-- زر قبول الطلب مع SweetAlert2 -->
+            <button type="button" class="btn btn-success px-4 py-2 rounded-pill fw-bold" onclick="confirmRequestApproval()">
+                <i class="fas fa-check ms-1"></i> قبول الطلب
+            </button>
+
+            <!-- زر رفض الطلب مع SweetAlert2 -->
+            <button type="button" class="btn btn-danger px-4 py-2 rounded-pill fw-bold" onclick="confirmRequestRejection()">
+                <i class="fas fa-times ms-1"></i> رفض الطلب
+            </button>
+        }
     </div>
 
 </div>
+
+<!-- سكريبت التفاعلات مع SweetAlert2 للحفاظ على منطق العمل لكل دور -->
+<script>
+    function confirmRequestApproval() {
+        const isDean = '@userRole.ToLower()' === 'dean';
+        const title = isDean ? 'تأكيد القبول النهائي' : 'تأكيد القبول المبدئي';
+        const text = isDean ? 'هل أنت متأكد من قبول طلب الطالبة نهائياً؟' : 'هل أنت متأكد من قبول طلب الطالبة وتحويله إلى العميد؟';
+        const targetAction = isDean ? '@Url.Action("DeanApproveApplication", "Home")' : '@Url.Action("HeadApproveApplication", "Home")';
+
+        Swal.fire({
+            title: title,
+            text: text,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#198754',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'نعم، قم بالقبول',
+            cancelButtonText: 'إلغاء',
+            customClass: { popup: 'rounded-4 shadow' }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let form = document.createElement('form');
+                form.method = 'post';
+                form.action = targetAction + '?id=@Model.Id';
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
+    }
+
+    function confirmRequestRejection() {
+        Swal.fire({
+            title: 'تأكيد الرفض',
+            text: 'هل أنت متأكد من رغبتك في رفض الطلب والتوجّه لتسجيل سبب الرفض؟',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'نعم، انتقل لتسجيل السبب',
+            cancelButtonText: 'إلغاء',
+            customClass: { popup: 'rounded-4 shadow' }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '@Url.Action("rejection_reason", "Home", new { id = Model.Id })';
+            }
+        });
+    }
+</script>
 
 <style>
     .text-custom-blue {

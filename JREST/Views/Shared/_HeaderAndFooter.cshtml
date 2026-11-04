@@ -26,8 +26,11 @@
     <!-- رابط مكتبة Bootstrap 5 للتنسيق -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- رابط مكتبة الأيقونات FontAwesome (مطلوبة لأيقونات الهاتف في صفحة اتصل بنا) -->
+    <!-- رابط مكتبة الأيقونات FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- SweetAlert2 CSS لتنبيهات التأكيد الحديثة -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
     <!-- ربط ملف الـ CSS الخاص بنماذج السكن (housing_form.css) -->
     <link rel="stylesheet" href="~/css/housing_form.css" />
@@ -121,6 +124,15 @@
                             <!-- رابط صفحة الأسعار -->
                             <a class="nav-link" asp-controller="Home" asp-action="prices">الأسعار</a>
                         </li>
+
+                        <!-- رابط التواصل مع العميد يظهر فقط لرئيس الشعبة (head) -->
+                        @if (userRole == "head")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="contact_dean">التواصل مع العميد</a>
+                            </li>
+                        }
+
                         <li class="nav-item">
                             <!-- تسجيل الخروج -->
                             <a class="nav-link text-custom-blue" asp-controller="Home" asp-action="Login">تسجيل الخروج</a>
@@ -150,6 +162,28 @@
             </div>
         </footer>
     </div>
+
+    <!-- SweetAlert2 JS لدعم رسائل التأكيد التفاعلية في جميع الصفحات -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- سكربت تعريب رسائل الحقول الإجبارية (required) للمتصفح -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const inputs = document.querySelectorAll("input, select, textarea");
+
+            inputs.forEach(function (input) {
+                input.addEventListener("invalid", function () {
+                    if (input.validity.valueMissing) {
+                        input.setCustomValidity("يرجى تعبئة هذا الحقل");
+                    }
+                });
+
+                input.addEventListener("input", function () {
+                    input.setCustomValidity("");
+                });
+            });
+        });
+    </script>
 
 </body>
 </html>

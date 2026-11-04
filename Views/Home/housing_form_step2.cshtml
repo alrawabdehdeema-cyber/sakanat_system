@@ -1,0 +1,187 @@
+﻿@model JREST.Models.HousingApplication
+
+@{
+    ViewData["Title"] = "طلب إلحاق الطالب بالسكن - الخطوة 2";
+    Layout = "_HeaderAndFooter";
+
+    // استقبال القيمة التي تحدد هل هو طلب جديد أم تجديد
+    bool isNew = ViewBag.IsNew ?? true;
+}
+
+<div class="container my-5" dir="rtl">
+
+    <!-- شريط التنبيه الأنيق (مخفي افتراضياً) -->
+    <div id="validationAlert" class="alert alert-danger alert-dismissible fade show d-none rounded-3 shadow-sm mb-4" role="alert">
+        <i class="fas fa-exclamation-circle ms-2"></i>
+        <span id="alertMessage">الرجاء تعبئة جميع الحقول الإجبارية قبل الانتقال للخطوة التالية.</span>
+        <button type="button" class="btn-close ms-auto me-0" onclick="hideValidationAlert()"></button>
+    </div>
+
+    <!-- عنوان الصفحة -->
+    <h3 class="text-custom-blue fw-bold mb-4 text-end">
+        @(isNew ? "طلب إلحاق الطالب بالسكن (طلب جديد)" : "طلب إلحاق الطالب بالسكن (تجديد / متابعة طلب)")
+    </h3>
+
+    <!-- شريط الخطوات (Stepper) مع تمرير قيمة isNew في الروابط -->
+    <div class="stepper-container mb-5">
+        <div class="d-flex align-items-center gap-2">
+            <a href="@Url.Action("housing_form", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">1</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step2", "Home", new { isNew = isNew })" class="step-circle text-decoration-none active">2</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step3", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">3</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step4", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">4</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step5", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">5</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step6", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">6</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step7", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">7</a>
+            <div class="step-line"></div>
+            <a href="@Url.Action("housing_form_step8", "Home", new { isNew = isNew })" class="step-circle text-decoration-none">8</a>
+        </div>
+    </div>
+
+    <!-- نموذج إدخال بيانات الخطوة الثانية -->
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <!-- تم ربط الفورم بـ Action لحفظ بيانات الخطوة الثانية عبر POST -->
+            <form id="step2Form" asp-action="SaveStep2" asp-controller="Home" method="post">
+                <input type="hidden" name="isNew" value="@isNew.ToString()" />
+
+                <div class="row mb-3">
+
+                    <!-- حقل تاريخ الالتحاق أول مره (يظهر فقط إذا كان تجديداً، أي isNew = false) -->
+                    @if (!isNew)
+                    {
+                        <div class="col-md-6 mb-3" id="enrollmentDateDiv">
+                            <label class="form-label fw-semibold text-end d-block">تاريخ الالتحاق اول مره <span class="text-danger">*</span></label>
+                            <input type="date" name="enrollmentDate" id="field1" class="form-control custom-input required-field" required />
+                        </div>
+                    }
+
+                    <!-- رقم موبايل الطالبة -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block">رقم موبايل الطالبة <span class="text-danger">*</span></label>
+                        <input type="tel" name="studentPhone" id="studentPhone" class="form-control custom-input required-field" placeholder="07xxxxxxxx" maxlength="10" required />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <!-- رقم موبايل ولي الامر -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block">رقم موبايل ولي الامر <span class="text-danger">*</span></label>
+                        <input type="tel" name="parentPhone" id="parentPhone" class="form-control custom-input required-field" placeholder="07xxxxxxxx" maxlength="10" required />
+                    </div>
+                    <!-- رقم جواز السفر (اختياري) -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block">رقم جواز السفر</label>
+                        <input type="text" name="passportNumber" class="form-control custom-input" />
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <!-- الحالة الاجتماعية (بدون سهم - باستخدام datalist) -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block">الحالة الاجتماعية <span class="text-danger">*</span></label>
+                        <input type="text" name="maritalStatus" id="field4" class="form-control custom-input required-field" list="maritalStatusOptions" placeholder="اختر أو اكتب الحالة الاجتماعية" required />
+                        <datalist id="maritalStatusOptions">
+                            <option value="أعزب / عزباء"></option>
+                            <option value="متزوج / متزوجة"></option>
+                        </datalist>
+                    </div>
+                    <!-- الديانة (بدون سهم - باستخدام datalist) -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block">الديانة <span class="text-danger">*</span></label>
+                        <input type="text" name="religion" id="field5" class="form-control custom-input required-field" list="religionOptions" placeholder="اختر أو اكتب الديانة" required />
+                        <datalist id="religionOptions">
+                            <option value="مسلم"></option>
+                            <option value="مسيحي"></option>
+                        </datalist>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <!-- تاريخ الميلاد (حقل تاريخ طبيعي بدون سهم) -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block">تاريخ الميلاد <span class="text-danger">*</span></label>
+                        <input type="date" name="birthDate" id="field6" class="form-control custom-input required-field" required />
+                    </div>
+                    <!-- الجنسية (بدون سهم - باستخدام datalist) -->
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold text-end d-block">الجنسية <span class="text-danger">*</span></label>
+                        <input type="text" name="nationality" id="field7" class="form-control custom-input required-field" list="nationalityOptions" placeholder="اختر أو اكتب الجنسية" required />
+                        <datalist id="nationalityOptions">
+                            <option value="أردني / أردنية"></option>
+                        </datalist>
+                    </div>
+                </div>
+
+                <!-- أزرار السابق والتالي -->
+                <div class="d-flex justify-content-between">
+                    <a href="@Url.Action("housing_form", "Home", new { isNew = isNew })" class="btn btn-secondary px-4 fw-semibold shadow-sm text-decoration-none">السابق</a>
+                    <button type="submit" id="nextBtn" class="btn btn-next text-white px-4 fw-semibold shadow-sm">التالي</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<!-- سكريبت التحقق وإظهار شريط التنبيه الأنيق -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const step2Form = document.getElementById("step2Form");
+        const requiredFields = document.querySelectorAll(".required-field");
+        const studentPhone = document.getElementById("studentPhone");
+        const parentPhone = document.getElementById("parentPhone");
+        const alertBox = document.getElementById("validationAlert");
+        const alertMessage = document.getElementById("alertMessage");
+
+        function showAlert(msg) {
+            alertMessage.textContent = msg;
+            alertBox.classList.remove("d-none");
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        window.hideValidationAlert = function() {
+            alertBox.classList.add("d-none");
+        }
+
+        function isValidPhone(phone) {
+            const phoneRegex = /^07\d{8}$/;
+            return phoneRegex.test(phone);
+        }
+
+        step2Form.addEventListener("submit", function (e) {
+            let allFilled = true;
+
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    allFilled = false;
+                }
+            });
+
+            if (!allFilled) {
+                showAlert("الرجاء تعبئة جميع الحقول الإجبارية قبل الانتقال للخطوة التالية.");
+                e.preventDefault();
+                return;
+            }
+
+            if (!isValidPhone(studentPhone.value.trim())) {
+                showAlert("الرجاء إدخال رقم موبايل صحيح للطالبة (يجب أن يبدأ بـ 07 ويتكون من 10 أرقام).");
+                studentPhone.focus();
+                e.preventDefault();
+                return;
+            }
+
+            if (!isValidPhone(parentPhone.value.trim())) {
+                showAlert("الرجاء إدخال رقم موبايل صحيح لولي الأمر (يجب أن يبدأ بـ 07 ويتكون من 10 أرقام).");
+                parentPhone.focus();
+                e.preventDefault();
+                return;
+            }
+        });
+    });
+</script>

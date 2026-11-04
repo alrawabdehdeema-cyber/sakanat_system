@@ -1,0 +1,102 @@
+﻿@{
+    ViewData["Title"] = "التواصل مع العميد";
+    Layout = "_HeaderAndFooter";
+}
+
+<div class="container my-5" dir="rtl">
+
+    <!-- عنوان الصفحة مع أيقونة رسائل -->
+    <div class="d-flex align-items-center justify-content-center mb-4">
+        <h3 class="text-custom-blue fw-bold mb-0">
+            <i class="bi bi-chat-dots-fill ms-2"></i> التواصل مع العميد
+        </h3>
+    </div>
+
+    <!-- شريط النجاح الأخضر (يظهر بعد نجاح الإرسال) -->
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div id="successAlert" class="alert alert-success text-center shadow-sm rounded-3 py-2 mb-4" style="display: none; font-weight: 600;">
+                <i class="fas fa-check-circle ms-2"></i> تم إرسال الرسالة إلى العميد بنجاح!
+            </div>
+        </div>
+    </div>
+
+    <!-- نموذج إرسال الرسالة للعميد -->
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <form id="contactDeanForm">
+
+                <!-- حقل نص الرسالة -->
+                <div class="mb-4">
+                    <textarea id="messageText" rows="6" class="form-control custom-input required-field" placeholder="اكتب نص الرسالة للعميد هنا..." required></textarea>
+                </div>
+
+                <!-- الأزرار (إرسال + الصفحة الرئيسية) -->
+                <div class="row g-2 justify-content-center">
+                    <div class="col-sm-6">
+                        <button type="button" id="sendBtn" class="btn btn-next text-white fw-semibold shadow-sm py-2 w-100" style="background-color: #2666AE;">ارسال</button>
+                    </div>
+                    <div class="col-sm-6">
+                        <a href="/Home/head_home_page" class="btn btn-outline-secondary fw-semibold shadow-sm py-2 w-100">الصفحة الرئيسية</a>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<!-- سكريبت الإرسال عبر AJAX للكنترولر -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const sendBtn = document.getElementById("sendBtn");
+        const messageText = document.getElementById("messageText");
+        const successAlert = document.getElementById("successAlert");
+
+        sendBtn.addEventListener("click", function (e) {
+            const message = messageText.value.trim();
+
+            if (!message) {
+                alert("الرجاء كتابة نص الرسالة قبل الإرسال.");
+                messageText.focus();
+                return;
+            }
+
+            // إرسال البيانات للكنترولر في دالة SendNotificationToDean
+            $.ajax({
+                url: '/Home/SendNotificationToDean',
+                type: 'POST',
+                data: {
+                    message: message
+                },
+                success: function (response) {
+                    if (response.success) {
+                        // 1. إظهار الشريط الأخضر بنجاح الإرسال
+                        successAlert.style.display = "block";
+
+                        // 2. تفريغ وتنظيف الحقل من الكلام
+                        messageText.value = "";
+
+                        // إخفاء الشريط الأخضر تلقائياً بعد 4 ثواني
+                        setTimeout(() => {
+                            successAlert.style.display = "none";
+                        }, 4000);
+                    } else {
+                        alert("حدث خطأ: " + response.message);
+                    }
+                },
+                error: function () {
+                    alert("حدث خطأ في الاتصال بالسيرفر، يرجى المحاولة لاحقاً.");
+                }
+            });
+        });
+    });
+</script>
+
+<style>
+    .text-custom-blue {
+        color: #2666AE !important;
+    }
+</style>

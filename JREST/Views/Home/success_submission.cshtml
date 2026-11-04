@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "تم إرسال الطلب بنجاح";
+    Layout = "_HeaderAndFooter";
+}
+
+<div class="container my-5 text-center" dir="rtl">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-0 shadow-lg p-4 p-md-5 rounded-4 my-4 bg-white">
+                <div class="card-body">
+
+                    <!-- أيقونة النجاح المضمونة (SVG) -->
+                    <div class="mb-4 d-flex justify-content-center">
+                        <div class="bg-success-subtle p-3 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 90px; height: 90px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" fill="#198754" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l4.992-5.99a.75.75 0 0 0-.018-1.042z" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- العنوان -->
+                    <h3 class="fw-bold text-custom-blue mb-3">تم إرسال طلبك بنجاح!</h3>
+
+                    <!-- الوصف -->
+                    <p class="text-secondary mb-4 fs-6 lh-base">
+                        شكراً لكِ. تم استلام طلب السكن الخاص بكِ بنجاح
+                    </p>
+
+                    <!-- تنبيه المتابعة -->
+                    <div class="alert alert-info border-0 rounded-3 mb-4 text-center py-3 px-4">
+                        <span class="fw-medium">يمكنك متابعة حالة الطلب من خلال الاشعارات الخاصة بك</span>
+                    </div>
+
+                    <!-- زر العودة -->
+                    <div class="mt-4">
+                        <a href="@Url.Action("student_home_page", "Home")" class="btn btn-next text-white px-5 py-2.5 fw-semibold shadow-sm rounded-pill">
+                            العودة للصفحة الرئيسية
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

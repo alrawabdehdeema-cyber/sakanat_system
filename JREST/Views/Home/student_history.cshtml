@@ -1,18 +1,42 @@
-﻿@{
+﻿@model IEnumerable<JREST.Models.HousingApplication>
+@{
     ViewData["Title"] = "معلومات الطالبة";
     Layout = "_HeaderAndFooter";
 
-    // استقبال اسم الطالبة (يمكن تمريره عبر الـ ViewBag أو استخدامه افتراضياً)
-    string studentName = ViewBag.StudentName ?? "ساره مهند";
+    string userRole = Context.Session.GetString("UserRole") ?? "";
+    string homeAction = "Index";
+
+    if (userRole.Equals("head", StringComparison.OrdinalIgnoreCase))
+    {
+        homeAction = "head_home_page";
+    }
+    else if (userRole.Equals("dean", StringComparison.OrdinalIgnoreCase))
+    {
+        homeAction = "dean_home_page";
+    }
+    else if (userRole.Equals("student", StringComparison.OrdinalIgnoreCase))
+    {
+        homeAction = "student_home_page";
+    }
 }
 
 <div class="container my-5" dir="rtl">
 
     <!-- عنوان الصفحة -->
-    <div class="d-flex align-items-center justify-content-center mb-5">
+    <div class="d-flex align-items-center justify-content-center mb-4">
         <h3 class="text-custom-blue fw-bold mb-0">
-            <i class="bi bi-clipboard2-data-fill ms-2"></i> معلومات الطالبة @studentName
+            <i class="bi bi-clipboard2-data-fill ms-2"></i> معلومات الطالبة
         </h3>
+    </div>
+
+    <!-- شريط التنبيه الموحد للرسائل (مخفي افتراضياً) -->
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div id="errorAlertMessage" class="alert alert-danger alert-dismissible fade show text-center shadow-sm rounded-3 py-2 mb-4 d-none" role="alert" style="font-weight: 600;">
+                <i class="fas fa-exclamation-circle ms-2"></i>
+                <span id="alertText">يرجى اختيار العام والفصل أولاً قبل النقر على زر فتح الطلب!</span>
+            </div>
+        </div>
     </div>
 
     <!-- نموذج اختيار العام والفصل -->
@@ -26,10 +50,21 @@
                         <label class="form-label fw-semibold fs-5">العام</label>
                     </div>
                     <div class="col-sm-9">
-                        <select id="academicYear" class="form-select custom-input py-2">
-                            <option selected disabled value="">جميع السنوات...</option>
-                            <option value="2025">2025/2024</option>
-                            <option value="2026">2026/2025</option>
+                        <select id="academicYear" class="form-select custom-select-box py-2">
+                            <option value="">جميع السنوات...</option>
+                            @if (Model != null && Model.Any())
+                            {
+                                foreach (var year in Model.Select(m => m.AcademicYear).Distinct())
+                                {
+                                    <option value="@year">@year</option>
+                                }
+                            }
+                            else
+                            {
+                                <option value="2026/2027">2027/2026</option>
+                                <option value="2025/2026">2026/2025</option>
+                                <option value="2024/2025">2025/2024</option>
+                            }
                         </select>
                     </div>
                 </div>
@@ -40,18 +75,23 @@
                         <label class="form-label fw-semibold fs-5">الفصل</label>
                     </div>
                     <div class="col-sm-9">
-                        <select id="semester" class="form-select custom-input py-2">
-                            <option selected disabled value="">جميع الفصول...</option>
-                            <option value="1">الفصل الأول</option>
-                            <option value="2">الفصل الثاني</option>
-                            <option value="3">الفصل الصيفي</option>
+                        <select id="semester" class="form-select custom-select-box py-2">
+                            <option value="">جميع الفصول...</option>
+                            <option value="الأول">الفصل الأول</option>
+                            <option value="الثاني">الفصل الثاني</option>
+                            <option value="الصيفي">الفصل الصيفي</option>
                         </select>
                     </div>
                 </div>
 
-                <!-- زر فتح الطلب -->
-                <div class="d-grid col-sm-6 mx-auto">
-                    <button type="button" id="openOrderBtn" class="btn btn-next text-white fw-semibold shadow-sm py-2 fs-5">فتح الطلب</button>
+                <!-- الأزرار -->
+                <div class="row g-2 justify-content-center">
+                    <div class="col-sm-6">
+                        <button type="button" id="openOrderBtn" class="btn text-white fw-semibold shadow-sm py-2 w-100" style="background-color: #2666AE;">فتح الطلب</button>
+                    </div>
+                    <div class="col-sm-6">
+                        <a href="@Url.Action(homeAction, "Home")" class="btn btn-outline-secondary fw-semibold shadow-sm py-2 w-100 text-decoration-none text-center">الصفحة الرئيسية</a>
+                    </div>
                 </div>
 
             </form>
@@ -60,19 +100,60 @@
 
 </div>
 
-<!-- سكريبت التفاعل والتحقق -->
+<!-- بيانات الطلبات بصيغة JSON والتحقق والفلترة -->
 <script>
+    const applicationsData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+        Model?.Select(a => new { id = a.Id, year = a.AcademicYear, semester = a.Semester }) ?? Enumerable.Empty<object>()
+    ));
+
     document.addEventListener("DOMContentLoaded", function () {
         const openOrderBtn = document.getElementById("openOrderBtn");
-        const academicYear = document.getElementById("academicYear");
-        const semester = document.getElementById("semester");
+        const academicYearSelect = document.getElementById("academicYear");
+        const semesterSelect = document.getElementById("semester");
+        const errorAlertMessage = document.getElementById("errorAlertMessage");
+        const alertText = document.getElementById("alertText");
+
+        function showAlert(msg) {
+            alertText.textContent = msg;
+            errorAlertMessage.classList.remove("d-none");
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
         openOrderBtn.addEventListener("click", function () {
-            // تحقق مبدئي (اختياري) أو توجيه لصفحة عرض الطلب الخاص بالطالبة
-            alert("جاري فتح طلب الطالبة للفصل المحدد...");
+            const selectedYear = academicYearSelect.value;
+            const selectedSemester = semesterSelect.value;
 
-            // مثال على التوجيه لاحقاً:
-            // window.location.href = '@Url.Action("housing_form", "Home")';
+            if (!selectedYear || !selectedSemester) {
+                showAlert("يرجى اختيار العام والفصل أولاً قبل النقر على زر فتح الطلب!");
+                return;
+            } else {
+                errorAlertMessage.classList.add("d-none");
+            }
+
+            const matchedApp = applicationsData.find(app => {
+                return app.year === selectedYear && app.semester === selectedSemester;
+            });
+
+            if (matchedApp) {
+                window.location.href = '/Home/view_student_request?id=' + matchedApp.id;
+            } else {
+                showAlert("لا يوجد طلب مسجل لهذه الطالبة للفصل والعام المحددين.");
+            }
         });
     });
 </script>
+
+<style>
+    .text-custom-blue {
+        color: #2666AE !important;
+    }
+
+    /* تنسيق صندوق الاختيار */
+    .form-select.custom-select-box {
+        direction: ltr !important;
+        text-align: right !important;
+        background-position: left 0.75rem center !important;
+        padding-right: 1rem !important;
+        padding-left: 2.5rem !important;
+    }
+</style>

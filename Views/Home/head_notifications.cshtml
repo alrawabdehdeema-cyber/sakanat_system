@@ -1,0 +1,80 @@
+﻿@model IEnumerable<JREST.Models.Notification>
+@{
+    ViewData["Title"] = "إشعارات رئيس الشعبة";
+    Layout = "_HeaderAndFooter";
+}
+
+<div class="container my-5" style="max-width: 950px; direction: rtl; text-align: right;">
+
+    <!-- عنوان الصفحة مع الأيقونة -->
+    <div class="d-flex align-items-center justify-content-center mb-5">
+        <h3 class="text-custom-blue fw-bold mb-0">
+            <i class="fas fa-bell ms-2"></i> إشعارات رئيس الشعبة
+        </h3>
+    </div>
+
+    <!-- جدول الإشعارات -->
+    <div class="card shadow-sm border-0 rounded-4 bg-white p-3">
+        <div class="table-responsive">
+            <table class="table table-bordered text-center align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="py-3 text-custom-blue" style="width: 20%;">رقم الإشعار</th>
+                        <th class="py-3 text-custom-blue" style="width: 55%;">الوصف</th>
+                        <th class="py-3 text-custom-blue" style="width: 25%;">الوقت</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        int counter = 1;
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@counter</td>
+                                <td class="text-end px-3">@item.Message</td>
+                                <td>@item.CreatedAt.ToString("yyyy/MM/dd - hh:mm tt")</td>
+                            </tr>
+                            counter++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3" class="text-center text-muted py-5">
+                                <i class="fas fa-bell-slash fs-2 mb-2 d-block text-secondary"></i>
+                                لا توجد إشعارات جديدة حالياً.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- الباجنيشن (Pagination) -->
+        <div class="d-flex justify-content-end mt-4">
+            <nav aria-label="Page navigation">
+                <ul class="pagination mb-0">
+                    <li class="page-item disabled"><a class="page-link text-muted" href="#">التالي</a></li>
+                    <li class="page-item active"><a class="page-link bg-custom-blue border-custom-blue text-white" href="#">1</a></li>
+                    <li class="page-item disabled"><a class="page-link text-muted" href="#">السابق</a></li>
+                </ul>
+            </nav>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    .bg-custom-blue {
+        background-color: #2666AE !important;
+    }
+
+    .border-custom-blue {
+        border-color: #2666AE !important;
+    }
+
+    .text-custom-blue {
+        color: #2666AE !important;
+    }
+</style>
